@@ -1,0 +1,33 @@
+---
+import { cn } from "@/lib/utils";
+const { className, icon, description, title, children } = Astro.props;
+---
+
+<div
+  class={cn(
+    "relative flex flex-col rounded-3xl border border-border bg-white p-2 sm:p-8 shadow-sm overflow-hidden",
+    className,
+  )}
+>
+  <div class="mb-4 flex items-center gap-3">
+    <div
+      class="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-50 text-slate-600 border border-slate-100"
+    >
+      {icon}
+    </div>
+    <h3 class="text-xl font-semibold text-slate-900">{title}</h3>
+  </div>
+  <p class="mb-8 text-slate-500 leading-relaxed max-w-[90%]">
+    {description}
+  </p>
+  <div class="relative mt-auto">
+    {/* Dot background for the mockup area */}
+    <div
+      class="absolute inset-0 bg-dot-pattern opacity-[0.4] pointer-events-none"
+    >
+    </div>
+    <div class="relative z-10 py-8 flex items-center justify-center">
+      {children}
+    </div>
+  </div>
+</div>
