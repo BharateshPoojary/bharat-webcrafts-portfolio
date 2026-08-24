@@ -1,0 +1,198 @@
+---
+import Heading from "./common/Heading.astro";
+import FeatureCard from "./common/Feature-card.astro";
+import {
+  Globe,
+  Landmark,
+  Scaling,
+  ShieldCheck,
+  ArrowRight,
+  ArrowLeftRight,
+  Lock,
+  Smartphone,
+  Fingerprint,
+  BadgeCheck,
+  ShieldAlert,
+  Activity,
+} from "@lucide/astro";
+
+// Global Payments — currency conversion rows
+const conversions = [
+  { flag: "🇺🇸", amount: "$1,237.58", code: "USD", to: "€1,130.32", toFlag: "🇪🇺", active: true },
+  { flag: "🇺🇸", amount: "$1,237.58", code: "USD", to: "€972.29", toFlag: "🇪🇺", active: false },
+  { flag: "🇺🇸", amount: "$1,237.58", code: "USD", to: "¥186,139.31", toFlag: "🇯🇵", active: false },
+  { flag: "🇺🇸", amount: "$1,237.58", code: "USD", to: "A$1,864.74", toFlag: "🇦🇺", active: false },
+];
+
+// Banking as a Service — create card form fields
+const cardFields = [
+  { label: "Cardholder Name", value: "Michael Johnson" },
+  { label: "Card Type", value: "Virtual" },
+  { label: "Card Network", value: "Visa" },
+  { label: "Currency", value: "USD" },
+];
+
+// Scalability — API reference table
+const apiRows = [
+  { category: "Payments", method: "POST", path: "/payments", purpose: "Process transactions at scale" },
+  { category: "Multi-Currency", method: "GET", path: "/exchange-rates", purpose: "Access low FX rates for 100+ currencies" },
+  { category: "User Management", method: "POST", path: "/users", purpose: "Create & manage customers dynamically" },
+  { category: "Security", method: "POST", path: "/fraud-detection", purpose: "AI-powered fraud detection for safe scaling" },
+  { category: "Scalability", method: "GET", path: "/server-status", purpose: "Monitor infrastructure health & uptime" },
+  { category: "Custom Workflows", method: "POST", path: "/webhooks", purpose: "Automate workflows with real-time webhooks" },
+];
+
+// Compliance & Security — feature tiles
+const complianceTiles = [
+  { icon: Lock, label: "Tokenization" },
+  { icon: Smartphone, label: "MFA" },
+  { icon: Fingerprint, label: "Fraud Detection" },
+  { icon: BadgeCheck, label: "PCI DSS Compliance" },
+  { icon: ShieldAlert, label: "Dispute Protection" },
+  { icon: Activity, label: "Monitoring" },
+];
+---
+
+<section class="relative w-full bg-white py-20 sm:py-28 text-slate-900 font-sans">
+  <div class="mx-auto w-full max-w-7xl xl:max-w-[1440px] px-6 lg:px-8">
+    <Heading
+      text="Why Choose Finech?"
+      heading="Powering the Future of Finance"
+      description="Unlock seamless transactions, secure financial services, and limitless scalability with our powerful, API-driven infrastructure."
+      type="light"
+    />
+
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      {/* Global Payments */}
+      <FeatureCard
+        title="Global Payments"
+        description="Accept payments in 100+ currencies with instant settlement, ensuring smooth transactions across borders."
+      >
+        <Globe slot="icon" class="h-5 w-5" />
+        <div class="w-full max-w-sm space-y-3 rounded-2xl bg-slate-900 p-4 shadow-xl">
+          {
+            conversions.map((row) => (
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-semibold text-white">{row.amount}</span>
+                  <span class="inline-flex items-center gap-1 rounded-md bg-white/10 px-1.5 py-0.5 text-[10px] font-semibold text-slate-300">
+                    <span>{row.flag}</span>
+                    {row.code}
+                  </span>
+                </div>
+                {row.active ? (
+                  <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white">
+                    <ArrowRight class="h-3 w-3" />
+                  </span>
+                ) : (
+                  <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/5 text-slate-400">
+                    <ArrowLeftRight class="h-3 w-3" />
+                  </span>
+                )}
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-semibold text-white">{row.to}</span>
+                  <span>{row.toFlag}</span>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </FeatureCard>
+
+      {/* Banking as a Service */}
+      <FeatureCard
+        title="Banking as a Service"
+        description="Issue virtual and physical cards effortlessly, securely hold and manage funds, and seamlessly provide a wide range of financial services."
+      >
+        <Landmark slot="icon" class="h-5 w-5" />
+        <div class="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-4 shadow-xl">
+          {/* Card visual */}
+          <div class="mb-4 flex h-24 flex-col justify-between rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 p-3 text-white">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-medium text-slate-300">finech</span>
+              <div class="flex">
+                <span class="h-4 w-4 rounded-full bg-[#EB001B]/90"></span>
+                <span class="-ml-2 h-4 w-4 rounded-full bg-[#F79E1B]/90"></span>
+              </div>
+            </div>
+            <div class="font-mono text-sm tracking-widest">5678 •••• •••• 3456</div>
+          </div>
+          {/* Create card form */}
+          <p class="mb-3 text-sm font-semibold text-slate-900">Create New Card</p>
+          <div class="space-y-2">
+            {
+              cardFields.map((field) => (
+                <div>
+                  <p class="mb-1 text-[10px] font-medium text-slate-400">{field.label}</p>
+                  <div class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs text-slate-600">
+                    {field.value}
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+          <button class="mt-4 w-full rounded-lg bg-blue-600 py-2 text-xs font-semibold text-white transition-colors hover:bg-blue-500">
+            Create Card Now
+          </button>
+        </div>
+      </FeatureCard>
+
+      {/* Scalability */}
+      <FeatureCard
+        title="Scalability"
+        description="A robust, API-driven system built to seamlessly support startups and enterprises, providing the flexibility, scalability, and security."
+      >
+        <Scaling slot="icon" class="h-5 w-5" />
+        <div class="w-full max-w-md overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl">
+          <div class="grid grid-cols-[1.1fr_1.3fr_1.6fr] gap-2 border-b border-slate-100 bg-slate-50 px-3 py-2 text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+            <span>Category</span>
+            <span>API Example</span>
+            <span>Purpose</span>
+          </div>
+          {
+            apiRows.map((row) => (
+              <div class="grid grid-cols-[1.1fr_1.3fr_1.6fr] items-center gap-2 border-b border-slate-50 px-3 py-2 last:border-0">
+                <span class="text-[11px] font-medium text-slate-700">{row.category}</span>
+                <span class="flex flex-wrap items-center gap-1">
+                  <span
+                    class:list={[
+                      "rounded px-1 py-0.5 text-[9px] font-bold",
+                      row.method === "POST"
+                        ? "bg-blue-100 text-blue-600"
+                        : "bg-emerald-100 text-emerald-600",
+                    ]}
+                  >
+                    {row.method}
+                  </span>
+                  <span class="font-mono text-[10px] text-slate-500">{row.path}</span>
+                </span>
+                <span class="text-[10px] text-slate-500">{row.purpose}</span>
+              </div>
+            ))
+          }
+        </div>
+      </FeatureCard>
+
+      {/* Compliance & Security */}
+      <FeatureCard
+        title="Compliance & Security"
+        description="Built-in KYC, AML, and fraud prevention measures to keep every transaction safe and compliant."
+      >
+        <ShieldCheck slot="icon" class="h-5 w-5" />
+        <div class="grid w-full max-w-md grid-cols-2 gap-3">
+          {
+            complianceTiles.map((tile) => {
+              const Icon = tile.icon;
+              return (
+                <div class="flex flex-col items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-5 text-center text-white">
+                  <Icon class="h-5 w-5 text-slate-200" />
+                  <span class="text-xs font-medium text-slate-200">{tile.label}</span>
+                </div>
+              );
+            })
+          }
+        </div>
+      </FeatureCard>
+    </div>
+  </div>
+</section>

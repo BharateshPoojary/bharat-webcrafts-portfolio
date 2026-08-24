@@ -1,0 +1,30 @@
+---
+import BlueText from "./Blue-text.astro";
+const { heading, description, text, type } = Astro.props;
+---
+
+<div class="mb-20 text-center">
+  <BlueText text={text} />
+  
+  {
+    type === "light" ? (
+      <>
+        <h1 class="mb-6 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl md:text-6xl">
+          {heading}
+        </h1>
+        <p class="mx-auto max-w-4xl text-lg text-slate-500 leading-relaxed">
+          {description}
+        </p>
+      </>
+    ) : (
+      <>
+        <h2 class="text-4xl md:text-5xl font-semibold tracking-tight text-balance">
+          {heading}
+        </h2>
+        <p class="text-neutral-400 max-w-4xl mx-auto leading-relaxed">
+          {description}
+        </p>
+      </>
+    )
+  }
+</div>

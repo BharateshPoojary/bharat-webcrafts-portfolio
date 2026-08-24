@@ -1,11 +1,11 @@
 ---
 import { cn } from "@/lib/utils";
-const { className, icon, description, title, children } = Astro.props;
+const { className, description, title } = Astro.props;
 ---
 
 <div
   class={cn(
-    "relative flex flex-col rounded-3xl border border-border bg-white p-2 sm:p-8 shadow-sm overflow-hidden",
+    "relative flex flex-col rounded-3xl border border-border bg-white p-4 sm:p-8 shadow-sm overflow-hidden",
     className,
   )}
 >
@@ -13,7 +13,7 @@ const { className, icon, description, title, children } = Astro.props;
     <div
       class="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-50 text-slate-600 border border-slate-100"
     >
-      {icon}
+      <slot name="icon" />
     </div>
     <h3 class="text-xl font-semibold text-slate-900">{title}</h3>
   </div>
@@ -27,7 +27,7 @@ const { className, icon, description, title, children } = Astro.props;
     >
     </div>
     <div class="relative z-10 py-8 flex items-center justify-center">
-      {children}
+      <slot />
     </div>
   </div>
 </div>

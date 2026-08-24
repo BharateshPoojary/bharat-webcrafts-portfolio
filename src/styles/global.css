@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+@theme {
+  --color-border: #e2e8f0;
+}
+
+/* Subtle dotted background used behind the mockups inside feature cards */
+@utility bg-dot-pattern {
+  background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+  background-size: 16px 16px;
+}

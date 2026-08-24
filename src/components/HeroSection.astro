@@ -1,0 +1,406 @@
+---
+import BgpatternAstroComponent from "./common/Bgpattern.astro";
+import Background from "./common/Background.astro";
+import Bluebutton from "./common/Bluebutton.astro";
+import BlueTextAstroComponent from "./common/Blue-text.astro";
+import Slack from "./logo/Slack.astro";
+import Amazon from "./logo/Amazon.astro";
+import Dropbox from "./logo/Drop-box.astro";
+import Loom from "./logo/Loom.astro";
+import { ArrowUpRight, CircleCheck, Mail, Menu, Send, X } from "@lucide/astro";
+---
+
+<section
+  class="relative min-h-screen w-full overflow-hidden bg-[#020617] text-white font-sans selection:bg-blue-500/30"
+>
+  <BgpatternAstroComponent />
+  <Background />
+  {/* Navigation */}
+  <header
+    class="relative z-50 flex items-center justify-between px-6 py-6 mx-auto w-full max-w-7xl xl:max-w-360 2xl:max-w-[1700px] lg:px-8 2xl:px-12"
+  >
+    <div class="flex items-center gap-3">
+      <div class="relative flex items-center justify-center w-8 h-8">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 500 500"
+          width="500"
+          height="500"
+          role="img"
+          aria-label="Bharat Web Crafts"
+        >
+          <title>Bharat Web Crafts</title>
+          <defs>
+            <path id="arcText" fill="none" d="M 342 77 A 196 196 0 0 1 342 423"
+            ></path>
+          </defs>
+          <g
+            fill="none"
+            stroke="#1E90FF"
+            stroke-width="11"
+            stroke-linecap="round"
+          >
+            <path d="M 312.9 94.2 A 168 168 0 1 0 312.9 405.8"></path>
+          </g>
+          <text
+            x="246"
+            y="352"
+            fill="#1E90FF"
+            font-family="Georgia, 'Times New Roman', 'Playfair Display', serif"
+            font-size="300"
+            font-weight="700"
+            text-anchor="middle">B</text
+          >
+          <text
+            fill="#1E90FF"
+            font-family="Helvetica, Arial, sans-serif"
+            font-size="26"
+            font-weight="700"
+            letter-spacing="7"
+          >
+            <textPath href="#arcText" xlink:href="#arcText" startOffset="4%"
+              >BHARAT WEB CRAFTS</textPath
+            >
+          </text>
+        </svg>
+      </div>
+      <span class="text-xl font-bold tracking-tight">Bharat Web Crafts</span>
+    </div>
+
+    {/* Desktop Navigation */}
+    <nav
+      class="hidden md:flex items-center gap-8 text-md font-medium text-slate-100"
+    >
+      <a href="#" class="hover:text-white transition-colors"> Home </a>
+      <a href="#" class="hover:text-white transition-colors"> About </a>
+      <a href="#" class="hover:text-white transition-colors"> Timeline </a>
+      <a href="#" class="hover:text-white transition-colors"> Projects </a>
+      <!-- <a href="#" class="hover:text-white transition-colors"> Contact </a> -->
+    </nav>
+
+    <div class="hidden md:flex items-center gap-4">
+      <!-- <button
+        class="text-sm font-medium hover:text-blue-400 cursor-pointer transition-colors"
+        >Login</button
+      > -->
+      <Bluebutton arrow="UpRight" text="Contact" />
+    </div>
+
+    <button
+      id="mobile-menu-open"
+      aria-label="Open menu"
+      aria-controls="mobile-menu"
+      aria-expanded="false"
+      class="md:hidden p-2 text-slate-300 hover:text-white transition-colors"
+    >
+      <Menu class="w-6 h-6" />
+    </button>
+  </header>
+
+  {/* Mobile Sidebar Navigation */}
+  <div
+    id="mobile-menu"
+    class="fixed inset-0 z-60 bg-[#020617]/95 backdrop-blur-xl transition-transform duration-300 md:hidden translate-x-full"
+  >
+    <button
+      id="mobile-menu-close"
+      aria-label="Close menu"
+      class="absolute top-6 right-6 p-2 text-slate-300 hover:text-white transition-colors"
+    >
+      <X class="w-6 h-6" />
+    </button>
+    <div
+      class="flex flex-col items-center justify-center h-full gap-8 text-xl font-medium"
+    >
+      <a href="#" class="mobile-menu-link"> Home </a>
+      <a href="#" class="mobile-menu-link"> About </a>
+      <a href="#" class="mobile-menu-link"> Timeline </a>
+      <a href="#" class="mobile-menu-link"> Projects </a>
+      <div class="flex flex-col gap-4 w-full px-12 mt-4 items-center">
+        <Bluebutton arrow="UpRight" text="Contact" />
+      </div>
+    </div>
+  </div>
+
+  {/* Hero Content */}
+  <div
+    class="relative z-10 grid gap-1 px-6 mx-auto w-full max-w-7xl xl:max-w-360 2xl:max-w-[1700px] grid-cols-1 lg:grid-cols-2 lg:px-8 2xl:px-12 lg:py-4 items-center"
+  >
+    {/* Left Column */}
+    <div class="max-w-2xl space-y-8">
+      <BlueTextAstroComponent text="AI Solution" />
+
+      <h1
+        class="text-5xl font-bold leading-[1.1] tracking-tight text-white sm:text-7xl"
+      >
+        From Idea to Production: <br />Full-Stack AI Engineer Shipping
+        Revenue-Driving Software.
+      </h1>
+
+      <p class="text-lg text-white leading-relaxed max-w-lg">
+        A Full-Stack Engineer who designs, builds, and ships products end-to-end
+        — that thousands of people rely on every day.
+      </p>
+      <!-- 
+      <div
+        class="flex flex-row items-center gap-3 p-1.5 bg-white rounded-2xl max-w-md shadow-2xl"
+      >
+        <div class="flex items-center flex-1 w-full gap-3 px-4 py-2">
+          <Mail class="w-5 h-5 text-slate-400" />
+          <input
+            type="email"
+            placeholder="Send your email"
+            class="w-full bg-transparent text-slate-900 placeholder:text-slate-400 focus:outline-none text-sm"
+          />
+        </div>
+        <div class="md:block hidden">
+          <Bluebutton arrow="Right" text="Talk to Sales" />
+        </div>
+        <div class="md:hidden block">
+          <button
+            class="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors group"
+          >
+            <Send
+              class="w-4 h-4 transition-transform group-hover:translate-x-1"
+            />
+          </button>
+        </div>
+      </div> -->
+
+      {/* Partners Section */}
+      <!-- <div class="pt-4">
+        <p class="text-base font-medium text-slate-200 mb-6">
+          Partners in Financial Success
+        </p>
+        <div
+          class="grid grid-cols-2 gap-x-8 gap-y-8 md:flex md:flex-wrap md:items-center md:gap-x-12 text-white opacity-80"
+        >
+          <Slack />
+          <Amazon />
+          <Dropbox />
+          <Loom />
+        </div>
+      </div> -->
+    </div>
+
+    {/* Right Column - UI Composition */}
+    <div class="relative h-167.5 sm:w-full w-90">
+      {/* Code Snippet Window */}
+      <div
+        class="absolute top-0 sm:right-10 right-12 w-75 sm:w-105 bg-[#1e293b] rounded-2xl shadow-2xl border border-white/10 overflow-hidden transform -rotate-1 hover:-translate-y-1 transition-transform duration-500 px-2 py-4 z-20 before:absolute before:bottom-0 before:left-0 before:w-72 before:h-22 before:bg-linear-to-tr before:from-slate-200 before:via-slate-50 before:opacity-50 before:blur-[10px]"
+      >
+        <div
+          class="flex items-center gap-1.5 px-4 py-3 border-b border-white/10"
+        >
+          <div class="w-2.5 h-2.5 rounded-full bg-white"></div>
+          <div class="w-2.5 h-2.5 rounded-full bg-white"></div>
+          <div class="w-2.5 h-2.5 rounded-full bg-white"></div>
+        </div>
+        <div
+          class="p-3 font-mono sm:text-sm text-[11px] leading-relaxed bg-white border-8 border-white/5 rounded-2xl"
+        >
+          <div class="flex gap-2">
+            <span class="text-emerald-400">GET</span>
+            <span class="text-black">/payments</span>
+          </div>
+          <div class="mt-2 text-slate-300">
+            <span class="text-black">Host:</span>
+            <span class="text-emerald-400"> api.finech.com</span>
+          </div>
+          <div class="mt-2 text-slate-300">
+            <span class="text-black">Authorization: Bearer{" "}</span>
+            <span class="text-orange-400">YOUR_API_KEY</span>
+          </div>
+          <div class="mt-2 text-slate-300">
+            <span class="text-black">Content-Type:application/</span>
+            <span class="text-sky-400">json</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Transfer Detail Card */}
+      <div
+        class="absolute top-52.5 sm:top-55 right-12 sm:left-0 sm:w-135 w-[320px] bg-white rounded-3xl shadow-3xl p-3 sm:p-8 transform rotate-[4deg] hover:rotate-0 transition-all duration-500"
+      >
+        <div class="flex justify-between items-start mb-8">
+          <div class="space-y-1">
+            <div
+              class="flex items-center gap-2 text-slate-400 text-xs sm:text-sm"
+            >
+              <ArrowUpRight class="w-4 h-4" />
+              Transfer Multi-Currency
+            </div>
+            <div class="font-semibold text-slate-900">TXN-9823745</div>
+            <div class="text-xs text-slate-400 font-medium">
+              Business Payment
+            </div>
+          </div>
+          <div class="text-right">
+            <div
+              class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-emerald-700 bg-emerald-100 text-emerald-700 text-[10px] font-bold uppercase tracking-wider"
+            >
+              <div
+                class="w-3 h-3 rounded-full bg-emerald-500 z-10 flex items-center justify-center"
+              >
+                <CircleCheck class="w-4 h-4 text-white" />
+              </div>
+              Success
+            </div>
+            <div class="mt-2 text-xs text-slate-400">March 12, 2025</div>
+            <div class="text-[10px] text-slate-400">14:32 UTC</div>
+          </div>
+        </div>
+
+        <div
+          class="relative flex items-center justify-between mb-4 sm:mb-8 px-2"
+        >
+          <div
+            class="w-3 h-3 rounded-full bg-slate-900 z-10 shadow-lg shadow-black/20"
+          >
+          </div>
+          <div class="absolute left-4 w-1/2 h-0.5 bg-slate-100"></div>
+          <div class="absolute left-4 w-1/2 h-0.5 bg-emerald-500"></div>
+          <div
+            class="w-3 h-3 rounded-full bg-emerald-500 z-10 absolute right-32 sm:right-52 flex items-center justify-center"
+          >
+            <CircleCheck class="w-4 h-4 text-white" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-1">
+          <div class="space-y-2">
+            <div
+              class="text-[10px] font-bold text-slate-400 uppercase tracking-widest"
+            >
+              Source
+            </div>
+            <div>
+              <div
+                class="text-md text-[12px] sm:text-2xl font-bold text-slate-900"
+              >
+                $1,250.00
+                <!-- <CurrencyBadge
+                                            code="USD"
+                                            flag={
+                                                <svg viewBox="0 0 24 24" class="w-4 h-4 rounded-full overflow-hidden shadow-sm">
+                                                    <rect width="24" height="24" fill="#fff" />
+                                                    <path fill="#002868" d="M0 0h12v12H0z" />
+                                                    <path
+                                                        fill="#bf0a30"
+                                                        d="M0 0h24v1.846H0zm0 3.692h24v1.846H0zm0 3.693h24v1.846H0zm0 3.692h24v1.846H0zm0 3.692h24v1.846H0zm0 3.692h24v1.847H0zm0 3.692h24V24H0z"
+                                                    />
+                                                    <path
+                                                        fill="#fff"
+                                                        d="M1.333 1.333l.48 1.474.48-1.474H1.333zm2.667 0l.48 1.474.48-1.474H4zm2.667 0l.48 1.474.48-1.474H6.667zm2.666 0l.48 1.474.48-1.474H9.333z"
+                                                    />
+                                                </svg>
+                                            }
+                                        /> -->
+              </div>
+              <div class="text-xs font-semibold text-slate-900 mt-1">
+                Michael Johnson
+              </div>
+              <div class="text-[7px] sm:text-[10px] text-slate-400">
+                JPMorgan Chase • 5678 9012 3456
+              </div>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div
+              class="text-[10px] font-bold text-slate-400 uppercase tracking-widest"
+            >
+              Destination
+            </div>
+            <div>
+              <div class="text-[12px] sm:text-2xl font-bold text-slate-900">
+                ¥187,500
+                <!-- <CurrencyBadge
+                                            code="JPY"
+                                            flag={
+                                                <svg
+                                                    viewBox="0 0 24 24"
+                                                    class="w-4 h-4 rounded-full overflow-hidden border border-slate-100 shadow-sm"
+                                                >
+                                                    <rect width="24" height="24" fill="#fff" />
+                                                    <circle cx="12" cy="12" r="7" fill="#bc002d" />
+                                                </svg>
+                                            }
+                                        /> -->
+              </div>
+              <div class="text-xs font-semibold text-slate-900 mt-1">
+                Hiroshi Tanaka
+              </div>
+              <div class="text-[7px] sm:text-[10px] text-slate-400">
+                Mitsubishi UFJ Bank • 9876 5432 1098
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Floating Metric Card 1 */}
+      <div
+        class="absolute bottom-34 sm:bottom-1 sm:right-75 z-10 sm:w-48 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-2 sm:p-6 transform rotate-6 shadow-2xl hover:rotate-0 transition-all duration-500"
+      >
+        <div class="flex items-center gap-1.5 mb-2">
+          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+        </div>
+        <div class="bg-white rounded-xl p-2 sm:p-4 shadow-inner">
+          <div class="text-4xl font-bold text-slate-900">4k+</div>
+          <div class="text-xs font-medium text-slate-400 mt-1">
+            Users Reached across platforms
+          </div>
+        </div>
+      </div>
+
+      {/* Floating Metric Card 2 */}
+      <div
+        class="absolute bottom-28 sm:bottom-0 right-17.5 sm:right-27.5 sm:w-48 backdrop-blur-xl rounded-2xl p-2 sm:p-6 shadow-blue-500/20 shadow-2xl transform -rotate-6 hover:rotate-0 transition-all duration-500"
+      >
+        <div class="flex items-center gap-1.5 mb-2">
+          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+        </div>
+        <div
+          class="bg-white rounded-xl p-4 border border-blue-100 shadow-inner"
+        >
+          <div class="text-4xl font-bold text-slate-900">7+</div>
+          <div class="text-xs font-medium text-slate-400 mt-1">
+            Full-stack products shipped
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const menu = document.getElementById("mobile-menu");
+  const openBtn = document.getElementById("mobile-menu-open");
+  const closeBtn = document.getElementById("mobile-menu-close");
+
+  const setOpen = (open: boolean) => {
+    if (!menu) return;
+    menu.classList.toggle("translate-x-full", !open);
+    // Hide the hamburger while the menu is open so it doesn't cover the X button
+    openBtn?.classList.toggle("hidden", open);
+    openBtn?.setAttribute("aria-expanded", String(open));
+    document.body.classList.toggle("overflow-hidden", open);
+  };
+
+  openBtn?.addEventListener("click", () => setOpen(true));
+  closeBtn?.addEventListener("click", () => setOpen(false));
+
+  // Close when a nav link is tapped
+  menu
+    ?.querySelectorAll("a.mobile-menu-link")
+    .forEach((link) => link.addEventListener("click", () => setOpen(false)));
+
+  // Close on Escape
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setOpen(false);
+  });
+</script>
