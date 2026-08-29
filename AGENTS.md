@@ -1,3 +1,7 @@
+## Writing style
+
+Always use a regular hyphen (`-`) instead of an em dash (`—`) or en dash (`–`) in all content, code, comments, and copy. This applies to UI text, JSON data, and everything you generate.
+
 ## Development
 
 When starting the dev server, use background mode:

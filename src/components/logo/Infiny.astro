@@ -1,0 +1,27 @@
+---
+const { class: className = "w-40" } = Astro.props;
+---
+
+<svg
+  class={className}
+  viewBox="0 0 340 140"
+  fill="currentColor"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label="Infiny"
+>
+  <title>Infiny</title>
+  {/* "i" - triangle tittle */}
+  <path d="M22 16 L22 52 L60 30 Z"></path>
+  {/* "i" - stem */}
+  <rect x="22" y="58" width="18" height="46"></rect>
+  {/* wordmark */}
+  <text
+    x="48"
+    y="104"
+    font-family="Arial, Helvetica, sans-serif"
+    font-weight="900"
+    font-size="92"
+    letter-spacing="-4">nfiny</text
+  >
+</svg>

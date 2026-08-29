@@ -1,0 +1,27 @@
+---
+const { class: className = "w-40" } = Astro.props;
+---
+
+<svg
+  class={className}
+  viewBox="0 0 64 64"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="3.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label="Education"
+>
+  <title>Education</title>
+  {/* Mortarboard */}
+  <path d="M32 12 L58 22 L32 32 L6 22 Z"></path>
+  {/* Tassel */}
+  <path d="M58 22 V33"></path>
+  <circle cx="58" cy="36" r="2.2" fill="currentColor" stroke="none"></circle>
+  {/* Head under the cap */}
+  <path d="M21 27 V34 C21 40 26 43 32 43 C38 43 43 40 43 34 V27"></path>
+  {/* Shoulders / base */}
+  <path d="M14 52 C14 45 22 41 32 41 C42 41 50 45 50 52"></path>
+</svg>

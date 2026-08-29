@@ -1,0 +1,83 @@
+---
+import {
+  Rocket,
+  Code,
+  Building2,
+  GraduationCap,
+  Briefcase,
+  Award,
+  Star,
+} from "@lucide/astro";
+// Map the JSON `icon` string → its Lucide component.
+// When you add an experience with a new icon in src/data/timeline.json,
+// import that icon above and add it to this map.
+const icons = {
+  Rocket,
+  Code,
+  Building2,
+  GraduationCap,
+  Briefcase,
+  Award,
+  Star,
+};
+
+const { item } = Astro.props;
+const Icon = icons[item.icon] ?? Star;
+---
+
+<div data-timeline-item class="timeline-item relative pl-8 pb-12 last:pb-0">
+  {/* Highlight bar - turns blue for the entry currently in view */}
+  <span
+    class="timeline-bar absolute left-0 top-0 h-full w-0.5 rounded-full bg-blue-600 opacity-0 transition-opacity duration-300"
+  ></span>
+
+  <div class="flex items-center gap-2">
+    <Icon class="w-5 h-5 text-slate-700" />
+    <h3 class="text-lg font-semibold text-slate-900">{item.title}</h3>
+  </div>
+
+  {
+    item.period && (
+      <div class="mt-1 text-xs font-medium uppercase tracking-wider text-slate-400">
+        {item.period}
+      </div>
+    )
+  }
+
+  {
+    item.description?.length > 0 && (
+      <ul class="mt-3 max-w-xl space-y-2 leading-relaxed text-slate-500">
+        {item.description.map((point: string) => (
+          <li class="relative pl-5">
+            <span class="absolute left-0 top-[0.6em] h-1.5 w-1.5 rounded-full bg-slate-300" />
+            {/* Segments wrapped in **...** in the JSON render bold. */}
+            {point.split("**").map((seg: string, i: number) =>
+              i % 2 === 1 ? (
+                <strong class="font-semibold text-slate-800">{seg}</strong>
+              ) : (
+                seg
+              ),
+            )}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  {
+    item.image && (
+      <img
+        src={item.image}
+        alt={item.title}
+        class="mt-4 w-full max-w-sm rounded-xl border border-slate-200 shadow-sm"
+      />
+    )
+  }
+
+</div>
+
+<style>
+  .timeline-item.is-active .timeline-bar {
+    opacity: 1;
+  }
+</style>

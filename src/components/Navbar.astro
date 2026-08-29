@@ -1,0 +1,263 @@
+---
+import Bluebutton from "./common/Bluebutton.astro";
+import BgpatternAstroComponent from "./common/Bgpattern.astro";
+import Background from "./common/Background.astro";
+import { Menu, X } from "@lucide/astro";
+---
+
+{/* Navigation */}
+<header
+  data-nav
+  data-theme="dark"
+  class="sticky top-0 z-50 w-full overflow-hidden transition-colors duration-300"
+>
+  <div class="nav-pattern">
+    <BgpatternAstroComponent />
+  </div>
+
+  <div
+    class="relative z-10 flex items-center justify-between px-6 py-4 mx-auto w-full max-w-7xl xl:max-w-360 2xl:max-w-[1700px] lg:px-8 2xl:px-12"
+  >
+    <div class="flex items-center gap-3">
+      <div class="relative flex items-center justify-center w-8 h-8">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 500 500"
+          width="500"
+          height="500"
+          role="img"
+          aria-label="Bharat Web Crafts"
+        >
+          <title>Bharat Web Crafts</title>
+          <defs>
+            <path id="arcText" fill="none" d="M 342 77 A 196 196 0 0 1 342 423"
+            ></path>
+          </defs>
+          <g
+            fill="none"
+            stroke="#1E90FF"
+            stroke-width="11"
+            stroke-linecap="round"
+          >
+            <path d="M 312.9 94.2 A 168 168 0 1 0 312.9 405.8"></path>
+          </g>
+          <text
+            x="246"
+            y="352"
+            fill="#1E90FF"
+            font-family="Georgia, 'Times New Roman', 'Playfair Display', serif"
+            font-size="300"
+            font-weight="700"
+            text-anchor="middle">B</text
+          >
+          <text
+            fill="#1E90FF"
+            font-family="Helvetica, Arial, sans-serif"
+            font-size="26"
+            font-weight="700"
+            letter-spacing="7"
+          >
+            <textPath href="#arcText" xlink:href="#arcText" startOffset="4%"
+              >BHARAT WEB CRAFTS</textPath
+            >
+          </text>
+        </svg>
+      </div>
+      <span class="text-xl font-bold tracking-tight">Bharat Web Crafts</span>
+    </div>
+
+    {/* Desktop Navigation */}
+    <nav
+      class="hidden md:flex items-center gap-8 text-md font-medium text-slate-100"
+    >
+      <a href="#" class="hover:text-white transition-colors"> Home </a>
+      <a href="#" class="hover:text-white transition-colors"> About </a>
+      <a href="#" class="hover:text-white transition-colors"> Timeline </a>
+      <a href="#" class="hover:text-white transition-colors"> Projects </a>
+      <!-- <a href="#" class="hover:text-white transition-colors"> Contact </a> -->
+    </nav>
+
+    <div class="hidden md:flex items-center gap-4">
+      <!-- <button
+        class="text-sm font-medium hover:text-blue-400 cursor-pointer transition-colors"
+        >Login</button
+      > -->
+      <Bluebutton arrow="UpRight" text="Contact" />
+    </div>
+
+    <button
+      id="mobile-menu-open"
+      aria-label="Open menu"
+      aria-controls="mobile-menu"
+      aria-expanded="false"
+      class="md:hidden p-2 text-slate-300 hover:text-white transition-colors"
+    >
+      <Menu class="w-6 h-6" />
+    </button>
+  </div>
+</header>
+
+{/* Mobile Sidebar Navigation */}
+<div
+  id="mobile-menu"
+  data-theme="dark"
+  class="fixed inset-0 z-60 overflow-hidden transition-all duration-300 md:hidden translate-x-full"
+>
+  <div class="nav-pattern">
+    <BgpatternAstroComponent />
+  </div>
+  <button
+    id="mobile-menu-close"
+    aria-label="Close menu"
+    class="absolute top-6 right-6 z-20 p-2 text-slate-300 hover:text-white transition-colors"
+  >
+    <X class="w-6 h-6" />
+  </button>
+  <div
+    class="relative z-10 flex flex-col items-center justify-center h-full gap-8 text-xl font-medium"
+  >
+    <a href="#" class="mobile-menu-link"> Home </a>
+    <a href="#" class="mobile-menu-link"> About </a>
+    <a href="#" class="mobile-menu-link"> Timeline </a>
+    <a href="#" class="mobile-menu-link"> Projects </a>
+    <div class="flex flex-col gap-4 w-full px-12 mt-4 items-center">
+      <Bluebutton arrow="UpRight" text="Contact" />
+    </div>
+  </div>
+</div>
+
+<script>
+  const menu = document.getElementById("mobile-menu");
+  const openBtn = document.getElementById("mobile-menu-open");
+  const closeBtn = document.getElementById("mobile-menu-close");
+
+  const setOpen = (open: boolean) => {
+    if (!menu) return;
+    menu.classList.toggle("translate-x-full", !open);
+    // Hide the hamburger while the menu is open so it doesn't cover the X button
+    openBtn?.classList.toggle("hidden", open);
+    openBtn?.setAttribute("aria-expanded", String(open));
+    document.body.classList.toggle("overflow-hidden", open);
+  };
+
+  openBtn?.addEventListener("click", () => setOpen(true));
+  closeBtn?.addEventListener("click", () => setOpen(false));
+
+  // Close when a nav link is tapped
+  menu
+    ?.querySelectorAll("a.mobile-menu-link")
+    .forEach((link) => link.addEventListener("click", () => setOpen(false)));
+
+  // Close on Escape
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setOpen(false);
+  });
+
+  // Swap the navbar theme to match whichever section sits behind it.
+  const header = document.querySelector<HTMLElement>("header[data-nav]");
+  const sections = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-nav-theme]"),
+  );
+
+  if (header && sections.length) {
+    const syncTheme = () => {
+      // Probe the vertical middle of the navbar band.
+      const probeY = header.offsetHeight / 2;
+      // Pick the last section whose top has passed the probe line. Falling
+      // back to the first section covers the very top of the page, where the
+      // probe sits in the navbar's own band above every section.
+      let theme = sections[0].dataset.navTheme || header.dataset.theme || "dark";
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top <= probeY) {
+          theme = section.dataset.navTheme || theme;
+        }
+      }
+      if (header.dataset.theme !== theme) header.dataset.theme = theme;
+      // Keep the mobile sidebar on the same theme as the section behind it.
+      if (menu && menu.dataset.theme !== theme) menu.dataset.theme = theme;
+    };
+
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        syncTheme();
+        ticking = false;
+      });
+    };
+
+    syncTheme();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+
+    // Anchor jumps (nav links / hash changes) don't always settle on a
+    // scroll event - especially with smooth scrolling or while the mobile
+    // menu is closing. Re-sync every frame for a short window afterwards so
+    // the navbar + sidebar land on the destination section's theme.
+    const trackScroll = (frames = 48) => {
+      syncTheme();
+      if (frames > 0) requestAnimationFrame(() => trackScroll(frames - 1));
+    };
+
+    document
+      .querySelectorAll<HTMLAnchorElement>(
+        "header[data-nav] nav a, #mobile-menu a.mobile-menu-link",
+      )
+      .forEach((link) => link.addEventListener("click", () => trackScroll()));
+    window.addEventListener("hashchange", () => trackScroll());
+  }
+</script>
+
+<style>
+  header[data-nav] {
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  header[data-nav][data-theme="dark"] {
+    background-color: #020617;
+    color: #fff;
+  }
+
+  header[data-nav][data-theme="light"] {
+    background-color: #fff;
+    color: #0f172a;
+  }
+
+  /* Dot-grid pattern only belongs on the dark (Hero) theme. */
+  .nav-pattern {
+    transition: opacity 0.3s ease;
+  }
+  header[data-nav][data-theme="light"] .nav-pattern {
+    opacity: 0;
+  }
+
+  /* Nav links + hamburger need explicit colors on the light theme. */
+  header[data-nav][data-theme="light"] nav a {
+    color: #334155;
+  }
+  header[data-nav][data-theme="light"] nav a:hover {
+    color: #0f172a;
+  }
+  header[data-nav][data-theme="light"] #mobile-menu-open {
+    color: #334155;
+  }
+
+  /* Mobile sidebar mirrors the section theme it opens over. */
+  #mobile-menu[data-theme="dark"] {
+    background-color: #020617;
+    color: #fff;
+  }
+  #mobile-menu[data-theme="light"] {
+    background-color: #fff;
+    color: #0f172a;
+  }
+  #mobile-menu[data-theme="light"] .nav-pattern {
+    opacity: 0;
+  }
+  #mobile-menu[data-theme="light"] #mobile-menu-close {
+    color: #334155;
+  }
+</style>

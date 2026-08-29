@@ -1,0 +1,18 @@
+---
+import Infiny from "../logo/Infiny.astro";
+import Vighnotech from "../logo/Vighnotech.astro";
+import Graduation from "../logo/Graduation.astro";
+
+// Map the JSON `logo` string → its logo component.
+// Add new company logos here as you create them under logo/.
+const logos = {
+  Infiny,
+  Vighnotech,
+  Graduation,
+};
+
+const { name, class: className } = Astro.props;
+const Logo = name ? logos[name] : null;
+---
+
+{Logo && <Logo class={className} />}

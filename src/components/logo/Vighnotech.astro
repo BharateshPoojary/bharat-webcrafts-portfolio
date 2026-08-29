@@ -1,0 +1,32 @@
+---
+const { class: className = "w-40" } = Astro.props;
+---
+
+<svg
+  class={className}
+  viewBox="0 0 392 88"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label="VighnoTech"
+>
+  <title>VighnoTech</title>
+  <defs>
+    <linearGradient id="vt-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#F97316"></stop>
+      <stop offset="0.5" stop-color="#FB923C"></stop>
+      <stop offset="1" stop-color="#FBBF24"></stop>
+    </linearGradient>
+  </defs>
+  <text
+    y="62"
+    font-family="Arial, Helvetica, sans-serif"
+    font-weight="800"
+    font-size="66"
+    letter-spacing="-2"
+  >
+    <tspan x="4" fill="#0f172a">Vighno</tspan><tspan fill="url(#vt-grad)"
+      >Tech</tspan
+    >
+  </text>
+</svg>

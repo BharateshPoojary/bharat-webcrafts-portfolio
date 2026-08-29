@@ -7,121 +7,15 @@ import Slack from "./logo/Slack.astro";
 import Amazon from "./logo/Amazon.astro";
 import Dropbox from "./logo/Drop-box.astro";
 import Loom from "./logo/Loom.astro";
-import { ArrowUpRight, CircleCheck, Mail, Menu, Send, X } from "@lucide/astro";
+import { ArrowUpRight, CircleCheck, Mail, Send } from "@lucide/astro";
 ---
 
 <section
-  class="relative min-h-screen w-full overflow-hidden bg-[#020617] text-white font-sans selection:bg-blue-500/30"
+  data-nav-theme="dark"
+  class="relative min-h-screen w-full overflow-clip bg-[#020617] text-white font-sans selection:bg-blue-500/30"
 >
   <BgpatternAstroComponent />
   <Background />
-  {/* Navigation */}
-  <header
-    class="relative z-50 flex items-center justify-between px-6 py-6 mx-auto w-full max-w-7xl xl:max-w-360 2xl:max-w-[1700px] lg:px-8 2xl:px-12"
-  >
-    <div class="flex items-center gap-3">
-      <div class="relative flex items-center justify-center w-8 h-8">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 500 500"
-          width="500"
-          height="500"
-          role="img"
-          aria-label="Bharat Web Crafts"
-        >
-          <title>Bharat Web Crafts</title>
-          <defs>
-            <path id="arcText" fill="none" d="M 342 77 A 196 196 0 0 1 342 423"
-            ></path>
-          </defs>
-          <g
-            fill="none"
-            stroke="#1E90FF"
-            stroke-width="11"
-            stroke-linecap="round"
-          >
-            <path d="M 312.9 94.2 A 168 168 0 1 0 312.9 405.8"></path>
-          </g>
-          <text
-            x="246"
-            y="352"
-            fill="#1E90FF"
-            font-family="Georgia, 'Times New Roman', 'Playfair Display', serif"
-            font-size="300"
-            font-weight="700"
-            text-anchor="middle">B</text
-          >
-          <text
-            fill="#1E90FF"
-            font-family="Helvetica, Arial, sans-serif"
-            font-size="26"
-            font-weight="700"
-            letter-spacing="7"
-          >
-            <textPath href="#arcText" xlink:href="#arcText" startOffset="4%"
-              >BHARAT WEB CRAFTS</textPath
-            >
-          </text>
-        </svg>
-      </div>
-      <span class="text-xl font-bold tracking-tight">Bharat Web Crafts</span>
-    </div>
-
-    {/* Desktop Navigation */}
-    <nav
-      class="hidden md:flex items-center gap-8 text-md font-medium text-slate-100"
-    >
-      <a href="#" class="hover:text-white transition-colors"> Home </a>
-      <a href="#" class="hover:text-white transition-colors"> About </a>
-      <a href="#" class="hover:text-white transition-colors"> Timeline </a>
-      <a href="#" class="hover:text-white transition-colors"> Projects </a>
-      <!-- <a href="#" class="hover:text-white transition-colors"> Contact </a> -->
-    </nav>
-
-    <div class="hidden md:flex items-center gap-4">
-      <!-- <button
-        class="text-sm font-medium hover:text-blue-400 cursor-pointer transition-colors"
-        >Login</button
-      > -->
-      <Bluebutton arrow="UpRight" text="Contact" />
-    </div>
-
-    <button
-      id="mobile-menu-open"
-      aria-label="Open menu"
-      aria-controls="mobile-menu"
-      aria-expanded="false"
-      class="md:hidden p-2 text-slate-300 hover:text-white transition-colors"
-    >
-      <Menu class="w-6 h-6" />
-    </button>
-  </header>
-
-  {/* Mobile Sidebar Navigation */}
-  <div
-    id="mobile-menu"
-    class="fixed inset-0 z-60 bg-[#020617]/95 backdrop-blur-xl transition-transform duration-300 md:hidden translate-x-full"
-  >
-    <button
-      id="mobile-menu-close"
-      aria-label="Close menu"
-      class="absolute top-6 right-6 p-2 text-slate-300 hover:text-white transition-colors"
-    >
-      <X class="w-6 h-6" />
-    </button>
-    <div
-      class="flex flex-col items-center justify-center h-full gap-8 text-xl font-medium"
-    >
-      <a href="#" class="mobile-menu-link"> Home </a>
-      <a href="#" class="mobile-menu-link"> About </a>
-      <a href="#" class="mobile-menu-link"> Timeline </a>
-      <a href="#" class="mobile-menu-link"> Projects </a>
-      <div class="flex flex-col gap-4 w-full px-12 mt-4 items-center">
-        <Bluebutton arrow="UpRight" text="Contact" />
-      </div>
-    </div>
-  </div>
-
   {/* Hero Content */}
   <div
     class="relative z-10 grid gap-1 px-6 mx-auto w-full max-w-7xl xl:max-w-360 2xl:max-w-[1700px] grid-cols-1 lg:grid-cols-2 lg:px-8 2xl:px-12 lg:py-4 items-center"
@@ -129,17 +23,17 @@ import { ArrowUpRight, CircleCheck, Mail, Menu, Send, X } from "@lucide/astro";
     {/* Left Column */}
     <div class="max-w-2xl space-y-8">
       <BlueTextAstroComponent text="AI Solution" />
-
+      
       <h1
         class="text-5xl font-bold leading-[1.1] tracking-tight text-white sm:text-7xl"
       >
         From Idea to Production: <br />Full-Stack AI Engineer Shipping
         Revenue-Driving Software.
       </h1>
-
+<Bluebutton text="My Resume" style="text-lg px-6 py-2" />
       <p class="text-lg text-white leading-relaxed max-w-lg">
         A Full-Stack Engineer who designs, builds, and ships products end-to-end
-        — that thousands of people rely on every day.
+        - that thousands of people rely on every day.
       </p>
       <!-- 
       <div
@@ -187,7 +81,7 @@ import { ArrowUpRight, CircleCheck, Mail, Menu, Send, X } from "@lucide/astro";
     <div class="relative h-167.5 sm:w-full w-90">
       {/* Code Snippet Window */}
       <div
-        class="absolute top-0 sm:right-10 right-12 w-75 sm:w-105 bg-[#1e293b] rounded-2xl shadow-2xl border border-white/10 overflow-hidden transform -rotate-1 hover:-translate-y-1 transition-transform duration-500 px-2 py-4 z-20 before:absolute before:bottom-0 before:left-0 before:w-72 before:h-22 before:bg-linear-to-tr before:from-slate-200 before:via-slate-50 before:opacity-50 before:blur-[10px]"
+        class="absolute top-4 md:top-2 sm:right-24 right-12 w-75 sm:w-105 bg-[#1e293b] rounded-2xl shadow-2xl border border-white/10 overflow-hidden transform -rotate-1 hover:-translate-y-1 transition-transform duration-500 px-2 py-4 z-20 before:absolute before:bottom-0 before:left-0 before:w-72 before:h-22 before:bg-linear-to-tr before:from-slate-200 before:via-slate-50 before:opacity-50 before:blur-[10px]"
       >
         <div
           class="flex items-center gap-1.5 px-4 py-3 border-b border-white/10"
@@ -201,11 +95,11 @@ import { ArrowUpRight, CircleCheck, Mail, Menu, Send, X } from "@lucide/astro";
         >
           <div class="flex gap-2">
             <span class="text-emerald-400">GET</span>
-            <span class="text-black">/payments</span>
+            <span class="text-black">/api/projects</span>
           </div>
           <div class="mt-2 text-slate-300">
             <span class="text-black">Host:</span>
-            <span class="text-emerald-400"> api.finech.com</span>
+            <span class="text-emerald-400"> api.bharatwebcrafts.dev</span>
           </div>
           <div class="mt-2 text-slate-300">
             <span class="text-black">Authorization: Bearer{" "}</span>
@@ -220,7 +114,7 @@ import { ArrowUpRight, CircleCheck, Mail, Menu, Send, X } from "@lucide/astro";
 
       {/* Transfer Detail Card */}
       <div
-        class="absolute top-52.5 sm:top-55 right-12 sm:left-0 sm:w-135 w-[320px] bg-white rounded-3xl shadow-3xl p-3 sm:p-8 transform rotate-[4deg] hover:rotate-0 transition-all duration-500"
+        class="absolute  top-56 sm:top-55 right-12 sm:left-0 sm:w-135 w-[320px] bg-white rounded-3xl shadow-3xl p-3 sm:p-8 transform rotate-[4deg] hover:rotate-0 transition-all duration-500"
       >
         <div class="flex justify-between items-start mb-8">
           <div class="space-y-1">
@@ -228,11 +122,11 @@ import { ArrowUpRight, CircleCheck, Mail, Menu, Send, X } from "@lucide/astro";
               class="flex items-center gap-2 text-slate-400 text-xs sm:text-sm"
             >
               <ArrowUpRight class="w-4 h-4" />
-              Transfer Multi-Currency
+              Deploy to Production
             </div>
-            <div class="font-semibold text-slate-900">TXN-9823745</div>
+            <div class="font-semibold text-slate-900">DEPLOY-9823745</div>
             <div class="text-xs text-slate-400 font-medium">
-              Business Payment
+              CI/CD Pipeline
             </div>
           </div>
           <div class="text-right">
@@ -272,13 +166,13 @@ import { ArrowUpRight, CircleCheck, Mail, Menu, Send, X } from "@lucide/astro";
             <div
               class="text-[10px] font-bold text-slate-400 uppercase tracking-widest"
             >
-              Source
+              Commit
             </div>
             <div>
               <div
                 class="text-md text-[12px] sm:text-2xl font-bold text-slate-900"
               >
-                $1,250.00
+                v2.4.1
                 <!-- <CurrencyBadge
                                             code="USD"
                                             flag={
@@ -298,10 +192,10 @@ import { ArrowUpRight, CircleCheck, Mail, Menu, Send, X } from "@lucide/astro";
                                         /> -->
               </div>
               <div class="text-xs font-semibold text-slate-900 mt-1">
-                Michael Johnson
+                Bharatesh Poojary
               </div>
               <div class="text-[7px] sm:text-[10px] text-slate-400">
-                JPMorgan Chase • 5678 9012 3456
+                github.com/BharateshPoojary • a1b2c3d
               </div>
             </div>
           </div>
@@ -309,11 +203,11 @@ import { ArrowUpRight, CircleCheck, Mail, Menu, Send, X } from "@lucide/astro";
             <div
               class="text-[10px] font-bold text-slate-400 uppercase tracking-widest"
             >
-              Destination
+              Environment
             </div>
             <div>
               <div class="text-[12px] sm:text-2xl font-bold text-slate-900">
-                ¥187,500
+                Production
                 <!-- <CurrencyBadge
                                             code="JPY"
                                             flag={
@@ -328,10 +222,10 @@ import { ArrowUpRight, CircleCheck, Mail, Menu, Send, X } from "@lucide/astro";
                                         /> -->
               </div>
               <div class="text-xs font-semibold text-slate-900 mt-1">
-                Hiroshi Tanaka
+                Hostinger · Mumbai, IN
               </div>
               <div class="text-[7px] sm:text-[10px] text-slate-400">
-                Mitsubishi UFJ Bank • 9876 5432 1098
+                srv1466521.hstgr.cloud • Ubuntu 25.10
               </div>
             </div>
           </div>
@@ -340,7 +234,7 @@ import { ArrowUpRight, CircleCheck, Mail, Menu, Send, X } from "@lucide/astro";
 
       {/* Floating Metric Card 1 */}
       <div
-        class="absolute bottom-34 sm:bottom-1 sm:right-75 z-10 sm:w-48 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-2 sm:p-6 transform rotate-6 shadow-2xl hover:rotate-0 transition-all duration-500"
+        class="absolute bottom-20 left-2 w-40 sm:left-auto sm:bottom-1 sm:right-75 z-10 sm:w-48 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-2 sm:p-6 transform rotate-6 shadow-2xl hover:rotate-0 transition-all duration-500"
       >
         <div class="flex items-center gap-1.5 mb-2">
           <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
@@ -357,7 +251,7 @@ import { ArrowUpRight, CircleCheck, Mail, Menu, Send, X } from "@lucide/astro";
 
       {/* Floating Metric Card 2 */}
       <div
-        class="absolute bottom-28 sm:bottom-0 right-17.5 sm:right-27.5 sm:w-48 backdrop-blur-xl rounded-2xl p-2 sm:p-6 shadow-blue-500/20 shadow-2xl transform -rotate-6 hover:rotate-0 transition-all duration-500"
+        class="absolute bottom-20 sm:bottom-0 w-40 right-12 sm:right-27.5 sm:w-48 backdrop-blur-xl rounded-2xl p-2 sm:p-6 shadow-blue-500/20 shadow-2xl transform -rotate-6 hover:rotate-0 transition-all duration-500"
       >
         <div class="flex items-center gap-1.5 mb-2">
           <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
@@ -376,31 +270,3 @@ import { ArrowUpRight, CircleCheck, Mail, Menu, Send, X } from "@lucide/astro";
     </div>
   </div>
 </section>
-
-<script>
-  const menu = document.getElementById("mobile-menu");
-  const openBtn = document.getElementById("mobile-menu-open");
-  const closeBtn = document.getElementById("mobile-menu-close");
-
-  const setOpen = (open: boolean) => {
-    if (!menu) return;
-    menu.classList.toggle("translate-x-full", !open);
-    // Hide the hamburger while the menu is open so it doesn't cover the X button
-    openBtn?.classList.toggle("hidden", open);
-    openBtn?.setAttribute("aria-expanded", String(open));
-    document.body.classList.toggle("overflow-hidden", open);
-  };
-
-  openBtn?.addEventListener("click", () => setOpen(true));
-  closeBtn?.addEventListener("click", () => setOpen(false));
-
-  // Close when a nav link is tapped
-  menu
-    ?.querySelectorAll("a.mobile-menu-link")
-    .forEach((link) => link.addEventListener("click", () => setOpen(false)));
-
-  // Close on Escape
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") setOpen(false);
-  });
-</script>
