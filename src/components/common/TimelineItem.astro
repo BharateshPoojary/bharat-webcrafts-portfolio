@@ -21,8 +21,18 @@ const icons = {
   Star,
 };
 
-const { item } = Astro.props;
-const Icon = icons[item.icon] ?? Star;
+interface TimelineEntry {
+  icon?: string;
+  logo?: string;
+  title: string;
+  period?: string;
+  description?: string[];
+  image?: string;
+}
+
+const { item } = Astro.props as { item: TimelineEntry };
+const Icon =
+  (item.icon && icons[item.icon as keyof typeof icons]) ?? Star;
 ---
 
 <div data-timeline-item class="timeline-item relative pl-8 pb-12 last:pb-0">
@@ -45,7 +55,7 @@ const Icon = icons[item.icon] ?? Star;
   }
 
   {
-    item.description?.length > 0 && (
+    item.description && item.description.length > 0 && (
       <ul class="mt-3 max-w-xl space-y-2 leading-relaxed text-slate-500">
         {item.description.map((point: string) => (
           <li class="relative pl-5">
@@ -64,7 +74,7 @@ const Icon = icons[item.icon] ?? Star;
     )
   }
 
-  {
+  <!-- {
     item.image && (
       <img
         src={item.image}
@@ -72,7 +82,7 @@ const Icon = icons[item.icon] ?? Star;
         class="mt-4 w-full max-w-sm rounded-xl border border-slate-200 shadow-sm"
       />
     )
-  }
+  } -->
 
 </div>
 

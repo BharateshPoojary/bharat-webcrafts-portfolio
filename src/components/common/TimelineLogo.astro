@@ -11,8 +11,13 @@ const logos = {
   Graduation,
 };
 
-const { name, class: className } = Astro.props;
-const Logo = name ? logos[name] : null;
+interface Props {
+  name?: string;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props as Props;
+const Logo = name && name in logos ? logos[name as keyof typeof logos] : null;
 ---
 
 {Logo && <Logo class={className} />}

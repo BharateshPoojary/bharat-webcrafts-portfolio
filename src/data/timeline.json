@@ -7,10 +7,10 @@
     "description": [
       "**Full Stack Engineer on Medimny,** a **leading B2B pharma platform in India** with **4,000+ active users.** Designed and shipped the **coupons and gifts campaign** system for medicine products - one of the **platform's largest features** - **architecting** it to fit existing business constraints, evaluating **tradeoffs**, and handling **real-money workflows** end to end.",
       "Optimized app performance by **eliminating unnecessary API requests, reducing irrelevant data** sent to the client, and **refining database queries,** resulting in a **5% improvement**.",
-      "Collaborated with **DevOps, client stakeholders, and mobile developers** to strengthen the platform's infrastructure and keep app and web features in sync; gained hands-on exposure to **round-robin load balancing, self-hosted and clustered database setups,** and related operational practices.",
+      "Collaborated with **DevOps, client stakeholders, and mobile developers** to strengthen the platform's infrastructure and keep app and web features in sync",
       "**Tech Stack: React.js, Express.js, Node.js, MongoDB, AWS, LLMs, Vector DBs**"
-    ],
-    "image": ""
+    ]
+
   },
   {
     "icon": "Code",
@@ -20,11 +20,11 @@
     "description": [
       "Sole **Full Stack Developer** for the **Inventory Management System,** a **core module** of the **company's ERP suite** - **owning both frontend and backend** development end to end.",
       "Improved **platform performance by 5-8%** by eliminating unnecessary component re-renders, resolving logic and syntax bugs, and **working directly with users** to diagnose and fix issues in production.",
-      "Built **robust APIs** with **structured error handling** and implementing the **full inventory lifecycle** - from requisition creation through scrap management.",
-      "Contributed to multiple SaaS products spanning **HR, Academic, Hostel Management, and ERP systems;** migrated codebases to TypeScript for long-term maintainability and handled complex edge cases using TanStack Query and React Hook Form.",
+      "Built **robust APIs** with **structured error handling** and implementing the **full inventory lifecycle** - from requisition creation to scrap management.",
+      "Contributed to multiple SaaS products spanning **HR, Academic, Hostel Management, and ERP systems;**   handled data intensive task  using TanStack Query and React Hook Form.",
       "**Tech Stack: Next.js, React, TypeScript, Redux, TanStack Query, React Hook Form, ShadCN UI**"
-    ],
-    "image": ""
+    ]
+  
   },
   {
     "icon": "GraduationCap",
@@ -32,9 +32,8 @@
     "title": "Bachelor of Computer Application - 9.49 CGPA",
     "period": "Nov 2021 - Aug 2024 · Karnataka, India",
     "description": [
-      "Built a strong foundation in **data structures, algorithms, and DBMS**.",
-      "Explored **web development** and shipped full-stack projects throughout the program."
-    ],
-    "image": ""
+      "Built a strong foundation in **Operating Systems, Computer Networks, and DBMS**.",
+      "Explored **web development** and shipped full-stack project."
+    ]
   }
 ]
