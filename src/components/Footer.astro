@@ -1,0 +1,169 @@
+---
+import BgpatternAstroComponent from "./common/Bgpattern.astro";
+import Background from "./common/Background.astro";
+import BlueText from "./common/Blue-text.astro";
+import Amazon from "./logo/Amazon.astro";
+import Dropbox from "./logo/Drop-box.astro";
+import Loom from "./logo/Loom.astro";
+import Slack from "./logo/Slack.astro";
+import { ArrowRight, CodeXml, Mail } from "@lucide/astro";
+
+// Footer navigation, kept as data so columns stay easy to edit.
+const columns = [
+  {
+    title: "Explore",
+    links: ["Home", "Projects", "Experience", "About"],
+  },
+  {
+    title: "Services",
+    links: ["Web Apps", "APIs & Backends", "AI Integration", "Consulting"],
+  },
+  {
+    title: "Resources",
+    links: ["Blog", "Resume", "Case Studies", "GitHub"],
+  },
+  {
+    title: "Connect",
+    links: ["LinkedIn", "GitHub", "Twitter / X", "Dribbble"],
+  },
+  {
+    title: "Legal",
+    links: ["Privacy Policy", "Terms of Service"],
+  },
+];
+---
+
+<footer
+  data-nav-theme="light"
+  class="relative w-full bg-white text-slate-900 font-sans overflow-hidden"
+>
+  {/* Subtle dot grid behind the whole footer */}
+  <div
+    class="absolute inset-0 z-0 opacity-[0.35] pointer-events-none"
+    style={{
+      backgroundImage: `radial-gradient(#cbd5e1 1.5px, transparent 1.5px)`,
+      backgroundSize: "28px 28px",
+    }}
+  >
+  </div>
+
+  <div class="relative z-10 mx-auto w-full max-w-7xl xl:max-w-360 px-6 lg:px-8 py-12 sm:py-16">
+    {/* CTA card */}
+    <div
+      class="relative overflow-hidden rounded-3xl bg-[#020617] text-white"
+    >
+      <BgpatternAstroComponent />
+      <Background />
+
+      <div class="relative z-10 flex flex-col items-center text-center px-6 pt-16 pb-10">
+        <BlueText text="Bharat Webcrafts" />
+        <h2 class="mt-2 text-4xl sm:text-5xl font-semibold tracking-tight">
+          Ready to Build Something Great?
+        </h2>
+        <p class="mt-4 max-w-xl text-slate-300 leading-relaxed">
+          Join the teams and founders I've helped ship reliable, revenue-driving
+          software.
+        </p>
+
+        {/* Email capture */}
+        <form
+          class="mt-8 flex flex-row items-center gap-3 p-1.5 bg-white rounded-2xl w-full max-w-md shadow-2xl"
+        >
+          <div class="flex items-center flex-1 w-full gap-3 px-4 py-2">
+            <Mail class="w-5 h-5 text-slate-400" />
+            <input
+              type="email"
+              placeholder="Send your email"
+              class="w-full bg-transparent text-slate-900 placeholder:text-slate-400 focus:outline-none text-sm"
+            />
+          </div>
+          <button
+            type="submit"
+            class="group flex items-center gap-2 whitespace-nowrap px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-500 transition-colors cursor-pointer"
+          >
+            Get in Touch
+            <ArrowRight
+              class="w-4 h-4 transition-transform group-hover:translate-x-1"
+            />
+          </button>
+        </form>
+      </div>
+
+      {/* Logo strip */}
+      <div
+        class="relative z-10 flex flex-wrap items-center justify-center gap-x-12 gap-y-6 border-t border-white/5 px-6 py-8 text-white opacity-80"
+      >
+        <Amazon />
+        <Dropbox />
+        <Loom />
+        <Slack />
+      </div>
+    </div>
+
+    {/* Footer navigation */}
+    <div class="mt-14 grid grid-cols-2 gap-10 sm:grid-cols-3 lg:grid-cols-6">
+      {/* Brand */}
+      <div class="col-span-2 sm:col-span-3 lg:col-span-1">
+        <a href="/" class="flex items-center gap-2">
+          <span
+            class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white"
+          >
+            <CodeXml class="h-5 w-5" />
+          </span>
+          <span class="text-lg font-bold tracking-tight text-slate-900">
+            bharat webcrafts
+          </span>
+        </a>
+        <a
+          href="mailto:hello@bharatwebcrafts.dev"
+          class="mt-4 block text-sm text-slate-500 hover:text-blue-600 transition-colors"
+        >
+          hello@bharatwebcrafts.dev
+        </a>
+      </div>
+
+      {
+        columns.map((col) => (
+          <div>
+            <h3 class="text-sm font-semibold text-slate-900">{col.title}</h3>
+            <ul class="mt-4 space-y-3">
+              {col.links.map((link) => (
+                <li>
+                  <a
+                    href="#"
+                    class="text-sm text-slate-500 hover:text-blue-600 transition-colors"
+                  >
+                    {link}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    {/* Bottom bar */}
+    <div
+      class="mt-12 flex flex-col gap-4 border-t border-slate-100 pt-6 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p class="text-sm text-slate-500">
+        © 2026 Bharat Webcrafts. All Rights Reserved.
+      </p>
+      <div class="flex items-center gap-6">
+        <a
+          href="#"
+          class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors"
+        >
+          Login
+        </a>
+        <a
+          href="#"
+          class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors"
+        >
+          Sign Up
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

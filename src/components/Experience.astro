@@ -60,11 +60,21 @@ const complianceTiles = [
   data-nav-theme="light"
   class="relative w-full bg-white py-20 sm:py-28 text-slate-900 font-sans"
 >
-  <div class="mx-auto w-full max-w-7xl xl:max-w-360 px-6 lg:px-8">
+  {/* Subtle dot grid behind the section */}
+  <div
+    class="absolute inset-0 z-0 opacity-[0.35] pointer-events-none"
+    style={{
+      backgroundImage: `radial-gradient(#cbd5e1 1.5px, transparent 1.5px)`,
+      backgroundSize: "28px 28px",
+    }}
+  >
+  </div>
+
+  <div class="relative z-10 mx-auto w-full max-w-7xl xl:max-w-360 px-6 lg:px-8">
     <Heading
       text="Experience & Education"
       heading="My Journey So Far"
-      description="A timeline of the roles I've shipped in and the education that shaped how I build - updated as the story continues."
+      description="A timeline of the roles I've shipped in and the education that shaped how I build."
       type="light"
     />
 

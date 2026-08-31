@@ -1,0 +1,55 @@
+---
+import {
+  ArrowUpRight,
+  Bot,
+  CalendarCheck,
+  CodeXml,
+  LayoutDashboard,
+  ShoppingCart,
+  Smartphone,
+} from "@lucide/astro";
+
+// Map JSON icon names to Lucide components so project data stays serialisable.
+const icons = {
+  Bot,
+  CalendarCheck,
+  CodeXml,
+  LayoutDashboard,
+  ShoppingCart,
+  Smartphone,
+};
+
+const { project } = Astro.props;
+const Icon = icons[project.icon as keyof typeof icons] ?? CodeXml;
+---
+
+<a
+  href={project.link ?? "#"}
+  class="group relative flex flex-col p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-blue-500/40 hover:shadow-md transition-all duration-300"
+>
+  <div class="mb-6 flex items-center justify-between">
+    <div
+      class="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-50 text-slate-600 border border-slate-100 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors"
+    >
+      <Icon class="w-6 h-6 stroke-[1.5]" />
+    </div>
+    <ArrowUpRight
+      class="w-5 h-5 text-slate-400 transition-colors group-hover:text-blue-600"
+    />
+  </div>
+
+  <h3 class="text-lg font-semibold text-slate-900 mb-2">{project.title}</h3>
+  <p class="text-slate-500 text-sm leading-relaxed mb-6">
+    {project.description}
+  </p>
+
+  <div class="mt-auto flex flex-wrap gap-2">
+    {
+      project.tags.map((tag: string) => (
+        <span class="rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-500">
+          {tag}
+        </span>
+      ))
+    }
+  </div>
+</a>

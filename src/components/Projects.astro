@@ -1,0 +1,30 @@
+---
+import Heading from "./common/Heading.astro";
+import BgpatternAstroComponent from "./common/Bgpattern.astro";
+import Background from "./common/Background.astro";
+import ProjectCard from "./common/ProjectCard.astro";
+import projects from "../data/projects.json";
+---
+
+<section
+  data-nav-theme="dark"
+  class="relative w-full overflow-clip bg-[#020617] text-white font-sans py-20 sm:py-28"
+>
+  <BgpatternAstroComponent />
+  <Background />
+
+  <div
+    class="relative z-10 mx-auto w-full max-w-7xl xl:max-w-360 px-6 lg:px-8"
+  >
+    <Heading
+      text="My Work"
+      heading="Projects I've Built"
+      description="A selection of products I've designed, built, and shipped end-to-end."
+      type="dark"
+    />
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </div>
+</section>
