@@ -11,6 +11,7 @@ import { ArrowUpRight, CircleCheck, Mail, Send } from "@lucide/astro";
 ---
 
 <section
+  id="home"
   data-nav-theme="dark"
   class="relative min-h-screen w-full overflow-clip bg-[#020617] text-white font-sans selection:bg-blue-500/30"
 >
@@ -30,7 +31,6 @@ import { ArrowUpRight, CircleCheck, Mail, Send } from "@lucide/astro";
         From Idea to Production: <br />Full-Stack AI Engineer Shipping
         Revenue-Driving Software.
       </h1>
-<Bluebutton text="My Resume" style="text-lg px-6 py-2" />
       <p class="text-lg text-white leading-relaxed max-w-lg">
         A Full-Stack Engineer who designs, builds, and ships products end-to-end
         - that thousands of people rely on every day.
@@ -78,10 +78,10 @@ import { ArrowUpRight, CircleCheck, Mail, Send } from "@lucide/astro";
     </div>
 
     {/* Right Column - UI Composition */}
-    <div class="relative h-167.5 sm:w-full w-90">
+    <div class="relative flex flex-col items-center gap-2 sm:gap-0 py-8 w-full">
       {/* Code Snippet Window */}
       <div
-        class="absolute top-4 md:top-2 sm:right-24 right-12 w-75 sm:w-105 bg-[#1e293b] rounded-2xl shadow-2xl border border-white/10 overflow-hidden transform -rotate-1 hover:-translate-y-1 transition-transform duration-500 px-2 py-4 z-20 before:absolute before:bottom-0 before:left-0 before:w-72 before:h-22 before:bg-linear-to-tr before:from-slate-200 before:via-slate-50 before:opacity-50 before:blur-[10px]"
+        class="w-75 sm:w-105 bg-[#1e293b] rounded-2xl shadow-2xl border border-white/10 overflow-hidden transform -rotate-1 hover:-translate-y-1 transition-transform duration-500 px-2 py-4 z-20 before:absolute before:bottom-0 before:left-0 before:w-72 before:h-22 before:bg-linear-to-tr before:from-slate-200 before:via-slate-50 before:opacity-50 before:blur-[10px]"
       >
         <div
           class="flex items-center gap-1.5 px-4 py-3 border-b border-white/10"
@@ -114,9 +114,9 @@ import { ArrowUpRight, CircleCheck, Mail, Send } from "@lucide/astro";
 
       {/* Transfer Detail Card */}
       <div
-        class="absolute  top-56 sm:top-55 right-12 sm:left-0 sm:w-135 w-[320px] bg-white rounded-3xl shadow-3xl p-3 sm:p-8 transform rotate-[4deg] hover:rotate-0 transition-all duration-500"
+        class="w-[320px] sm:w-135 bg-white rounded-3xl shadow-3xl p-3 sm:p-8 transform rotate-[4deg] hover:rotate-0 transition-all duration-500 z-10"
       >
-        <div class="flex justify-between items-start mb-8">
+        <div class="flex justify-between items-start mb-6">
           <div class="space-y-1">
             <div
               class="flex items-center gap-2 text-slate-400 text-xs sm:text-sm"
@@ -232,38 +232,43 @@ import { ArrowUpRight, CircleCheck, Mail, Send } from "@lucide/astro";
         </div>
       </div>
 
-      {/* Floating Metric Card 1 */}
+      {/* Floating Metric Cards Row */}
       <div
-        class="absolute bottom-20 left-2 w-40 sm:left-auto sm:bottom-1 sm:right-75 z-10 sm:w-48 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-2 sm:p-6 transform rotate-6 shadow-2xl hover:rotate-0 transition-all duration-500"
+        class="flex items-center justify-center gap-4 sm:gap-4 -mt-2 sm:-mt-4 z-20"
       >
-        <div class="flex items-center gap-1.5 mb-2">
-          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
-          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
-          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
-        </div>
-        <div class="bg-white rounded-xl p-2 sm:p-4 shadow-inner">
-          <div class="text-4xl font-bold text-slate-900">4k+</div>
-          <div class="text-xs font-medium text-slate-400 mt-1">
-            Users Reached across platforms
+        {/* Floating Metric Card 1 */}
+        <div
+          class="w-40 sm:w-48 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-2 sm:p-6 transform rotate-6 shadow-2xl hover:rotate-0 transition-all duration-500"
+        >
+          <div class="flex items-center gap-1.5 mb-2">
+            <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+            <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+            <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+          </div>
+          <div class="bg-white rounded-xl p-2 sm:p-4 shadow-inner">
+            <div class="text-4xl font-bold text-slate-900">4k+</div>
+            <div class="text-xs font-medium text-slate-400 mt-1">
+              Users Reached across platforms
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Floating Metric Card 2 */}
-      <div
-        class="absolute bottom-20 sm:bottom-0 w-40 right-12 sm:right-27.5 sm:w-48 backdrop-blur-xl rounded-2xl p-2 sm:p-6 shadow-blue-500/20 shadow-2xl transform -rotate-6 hover:rotate-0 transition-all duration-500"
-      >
-        <div class="flex items-center gap-1.5 mb-2">
-          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
-          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
-          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
-        </div>
+        {/* Floating Metric Card 2 */}
         <div
-          class="bg-white rounded-xl p-4 border border-blue-100 shadow-inner"
+          class="w-40 sm:w-48 backdrop-blur-xl rounded-2xl p-2 sm:p-6 shadow-blue-500/20 shadow-2xl transform -rotate-6 hover:rotate-0 transition-all duration-500"
         >
-          <div class="text-4xl font-bold text-slate-900">7+</div>
-          <div class="text-xs font-medium text-slate-400 mt-1">
-            Full-stack products shipped
+          <div class="flex items-center gap-1.5 mb-2">
+            <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+            <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+            <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+          </div>
+          <div
+            class="bg-white rounded-xl p-4 border border-blue-100 shadow-inner"
+          >
+            <div class="text-4xl font-bold text-slate-900">7+</div>
+            <div class="text-xs font-medium text-slate-400 mt-1">
+              Full-stack products shipped
+            </div>
           </div>
         </div>
       </div>
