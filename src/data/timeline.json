@@ -8,7 +8,7 @@
       "**Full Stack Engineer on Medimny,** a **leading B2B pharma platform in India** with **4,000+ active users.** Designed and shipped the **coupons and gifts campaign** system for medicine products - one of the **platform's largest features** - **architecting** it to fit existing business constraints, evaluating **tradeoffs**, and handling **real-money workflows** end to end.",
       "Optimized app performance by **eliminating unnecessary API requests, reducing irrelevant data** sent to the client, and **refining database queries,** resulting in a **5% improvement**.",
       "Collaborated with **DevOps, client stakeholders, and mobile developers** to strengthen the platform's infrastructure and keep app and web features in sync",
-      "**Tech Stack: React.js, Express.js, Node.js, MongoDB, AWS, LLMs, Vector DBs**"
+      "**Tech stack: React.js, Express.js, Node.js, MongoDB, AWS, LLMs, Vector DBs**"
     ]
 
   },
@@ -22,9 +22,20 @@
       "Improved **platform performance by 5-8%** by eliminating unnecessary component re-renders, resolving logic and syntax bugs, and **working directly with users** to diagnose and fix issues in production.",
       "Built **robust APIs** with **structured error handling** and implementing the **full inventory lifecycle** - from requisition creation to scrap management.",
       "Contributed to multiple SaaS products spanning **HR, Academic, Hostel Management, and ERP systems;**   handled data intensive task  using TanStack Query and React Hook Form.",
-      "**Tech Stack: Next.js, React, TypeScript, Redux, TanStack Query, React Hook Form, ShadCN UI**"
+      "**Tech stack: Next.js, React, TypeScript, Redux, TanStack Query, React Hook Form, ShadCN UI**"
     ]
   
+  },
+  {
+    "icon": "Code",
+    "logo": "Lazytech",
+    "title": "Frontend Developer - Lazytech Solutions",
+    "period": "Nov 2024 - Feb 2025 · Mumbai, India",
+    "description": [
+      "Handled the **UI/UX development of RGalleria,** a platform where users can **explore shops across different categories,** while building an **admin interface for managing shops.**",
+      "Collaborated on a **client project (LIC Marketing Website)** by creating and customizing **reusable frontend templates** for festive campaigns, enabling **rapid deployment of seasonal marketing content.**",
+      "**Tech stack: PHP, HTML, CSS, JavaScript**"
+    ]
   },
   {
     "icon": "GraduationCap",

@@ -1,0 +1,45 @@
+---
+const { class: className = "w-40" } = Astro.props;
+---
+
+<svg
+  class={className}
+  viewBox="0 0 392 120"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label="Lazytech - We Make People Lazy With Our Technology"
+>
+  <title>Lazytech</title>
+  <defs>
+    <linearGradient id="lt-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#F97316"></stop>
+      <stop offset="0.5" stop-color="#FB923C"></stop>
+      <stop offset="1" stop-color="#FDBA74"></stop>
+    </linearGradient>
+  </defs>
+
+  <text
+    y="66"
+    font-family="Arial, Helvetica, sans-serif"
+    font-weight="800"
+    font-size="66"
+    letter-spacing="-1"
+  >
+    <tspan x="4" fill="url(#lt-grad)">LAZY</tspan><tspan fill="#111827"
+      >TECH</tspan
+    >
+  </text>
+
+  <text
+    x="6"
+    y="98"
+    fill="#111827"
+    font-family="Arial, Helvetica, sans-serif"
+    font-weight="700"
+    font-size="16"
+    letter-spacing="0.2"
+  >
+    We Make People Lazy With Our Technology
+  </text>
+</svg>
