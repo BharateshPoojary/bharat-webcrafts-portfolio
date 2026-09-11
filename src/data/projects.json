@@ -1,44 +1,26 @@
 [
   {
-    "title": "Commerce Platform",
-    "description": "A full-stack storefront with cart, checkout, and Stripe payments serving thousands of monthly orders.",
-    "icon": "ShoppingCart",
-    "tags": ["React", "Node.js", "Stripe"],
-    "link": "#"
+    "name": "Ask-pdf",
+    "description": "A full-stack RAG chatbot that lets users chat with uploaded PDFs - LangChain, Gemini 2.5 Flash, and Pinecone vector search with real-time response streaming.",
+    "stack": ["Next.js 15", "TypeScript", "LangChain", "Pinecone", "Gemini 2.5", "Clerk"],
+    "image": "",
+    "github": "",
+    "live": ""
   },
   {
-    "title": "AI Support Assistant",
-    "description": "A retrieval-augmented chatbot that resolves customer queries from a knowledge base in real time.",
-    "icon": "Bot",
-    "tags": ["Next.js", "OpenAI", "Postgres"],
-    "link": "#"
+    "name": "Anonytalks",
+    "description": "A self-hosted social platform for anonymous, direct media sharing via unique shareable links, with AWS S3 uploads and NextAuth (Google OAuth + password).",
+    "stack": ["Next.js", "TypeScript", "Redux", "AWS S3", "NextAuth", "Resend"],
+    "image": "",
+    "github": "",
+    "live": ""
   },
   {
-    "title": "Analytics Dashboard",
-    "description": "A real-time dashboard visualising product usage, revenue, and retention for internal teams.",
-    "icon": "LayoutDashboard",
-    "tags": ["Astro", "D3", "Supabase"],
-    "link": "#"
-  },
-  {
-    "title": "Booking System",
-    "description": "A scheduling app with calendar sync, reminders, and automated confirmations for service businesses.",
-    "icon": "CalendarCheck",
-    "tags": ["Vue", "Express", "Redis"],
-    "link": "#"
-  },
-  {
-    "title": "Developer API",
-    "description": "A documented REST API with SDKs, webhooks, and a sandbox environment for third-party integrations.",
-    "icon": "CodeXml",
-    "tags": ["TypeScript", "Fastify", "Docker"],
-    "link": "#"
-  },
-  {
-    "title": "Mobile Companion",
-    "description": "A cross-platform mobile app delivering push notifications and offline-first sync to end users.",
-    "icon": "Smartphone",
-    "tags": ["React Native", "GraphQL", "SQLite"],
-    "link": "#"
+    "name": "Project 3",
+    "description": "Content to be added.",
+    "stack": ["TBD"],
+    "image": "",
+    "github": "",
+    "live": ""
   }
 ]

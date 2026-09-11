@@ -5,10 +5,10 @@
     "title": "Full Stack AI Engineer - Infiny WebCom",
     "period": "Feb 2026 - Present · Mumbai, India",
     "description": [
-      "**Full Stack Engineer on Medimny,** a **leading B2B pharma platform in India** with **4,000+ active users.** Designed and shipped the **coupons and gifts campaign** system for medicine products - one of the **platform's largest features** - **architecting** it to fit existing business constraints, evaluating **tradeoffs**, and handling **real-money workflows** end to end.",
-      "Optimized app performance by **eliminating unnecessary API requests, reducing irrelevant data** sent to the client, and **refining database queries,** resulting in a **5% improvement**.",
-      "Collaborated with **DevOps, client stakeholders, and mobile developers** to strengthen the platform's infrastructure and keep app and web features in sync",
-      "**Tech stack: React.js, Express.js, Node.js, MongoDB, AWS, LLMs, Vector DBs**"
+      "Full Stack Engineer on **Medimny,** a leading B2B pharma platform in India with **4,000+ active users.** Designed and shipped the coupons and gifts campaign system for medicine products - one of the platform's largest features - architecting it to fit existing business constraints, evaluating tradeoffs, and handling real-money workflows end to end.",
+      "Optimized app performance by eliminating unnecessary API requests, reducing irrelevant data sent to the client, and refining database queries.",
+      "Collaborated with DevOps, client stakeholders, and mobile developers to strengthen the platform's infrastructure and keep app and web features in sync; gained hands-on exposure in self-host and clustered database setups.",
+      "**Tech stack:** React.js, Express.js, Node.js, MongoDB, AWS, LLMs, Vector DBs"
     ]
 
   },
@@ -18,11 +18,11 @@
     "title": "Full Stack Developer - Vighnotech",
     "period": "Mar 2025 - Jan 2026 · Mumbai, India",
     "description": [
-      "Sole **Full Stack Developer** for the **Inventory Management System,** a **core module** of the **company's ERP suite** - **owning both frontend and backend** development end to end.",
-      "Improved **platform performance by 5-8%** by eliminating unnecessary component re-renders, resolving logic and syntax bugs, and **working directly with users** to diagnose and fix issues in production.",
-      "Built **robust APIs** with **structured error handling** and implementing the **full inventory lifecycle** - from requisition creation to scrap management.",
-      "Contributed to multiple SaaS products spanning **HR, Academic, Hostel Management, and ERP systems;**   handled data intensive task  using TanStack Query and React Hook Form.",
-      "**Tech stack: Next.js, React, TypeScript, Redux, TanStack Query, React Hook Form, ShadCN UI**"
+      "Sole Full Stack Developer for the **Inventory Management System,** a core module of the company's ERP suite - owning both frontend and backend development end to end.",
+      "Built robust APIs with structured error handling covering the full inventory lifecycle - from requisition creation to scrap management.",
+      "Improved platform performance by 5-8% in page render time by eliminating unnecessary component re-renders and resolving logic and syntax bugs, partnering directly with users to diagnose and fix production issues.",
+      "Contributed to multiple SaaS products spanning HR, Academic, Hostel Management, and ERP systems; handled complex UI/UX challenges using TanStack Query and React Hook Form.",
+      "**Tech stack:** Next.js, React, TypeScript, Redux, TanStack Query, React Hook Form, ShadCN UI"
     ]
   
   },
@@ -32,9 +32,9 @@
     "title": "Frontend Developer - Lazytech Solutions",
     "period": "Nov 2024 - Feb 2025 · Mumbai, India",
     "description": [
-      "Handled the **UI/UX development of RGalleria,** a platform where users can **explore shops across different categories,** while building an **admin interface for managing shops.**",
-      "Collaborated on a **client project (LIC Marketing Website)** by creating and customizing **reusable frontend templates** for festive campaigns, enabling **rapid deployment of seasonal marketing content.**",
-      "**Tech stack: PHP, HTML, CSS, JavaScript**"
+      "Handled the UI/UX development of RGalleria, a platform where users can explore shops across different categories, while building an admin interface for managing shops.",
+      "Collaborated on a client project (LIC Marketing Website) by creating and customizing reusable frontend templates for festive campaigns, enabling rapid deployment of seasonal marketing content.",
+      "**Tech stack:** PHP, HTML, CSS, JavaScript"
     ]
   },
   {
@@ -43,8 +43,8 @@
     "title": "Bachelor of Computer Application - 9.49 CGPA",
     "period": "Nov 2021 - Aug 2024 · Karnataka, India",
     "description": [
-      "Built a strong foundation in **Operating Systems, Computer Networks, and DBMS**.",
-      "Explored **web development** and shipped full-stack project."
+      "Built a strong foundation in Operating Systems, Computer Networks, and DBMS.",
+      "Explored web development and shipped full-stack project."
     ]
   }
 ]

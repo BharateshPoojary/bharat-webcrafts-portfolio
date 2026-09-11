@@ -2,8 +2,7 @@
 import Heading from "./common/Heading.astro";
 import BgpatternAstroComponent from "./common/Bgpattern.astro";
 import Background from "./common/Background.astro";
-import ProjectCard from "./common/ProjectCard.astro";
-import projects from "../data/projects.json";
+import ProjectShowcase from "./ProjectShowcase.astro";
 ---
 
 <section
@@ -24,8 +23,6 @@ import projects from "../data/projects.json";
       type="dark"
     />
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {projects.map((project) => <ProjectCard project={project} />)}
-    </div>
+    <ProjectShowcase />
   </div>
 </section>

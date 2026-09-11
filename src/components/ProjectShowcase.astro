@@ -1,0 +1,207 @@
+---
+import { Rocket, ArrowUpRight, ExternalLink } from "@lucide/astro";
+import projects from "../data/projects.json";
+
+// Projects live in src/data/projects.json. Clicking a row on the left swaps the
+// right-hand terminal panel to that project. Leave `image` empty to show the
+// "coming soon" fallback; leave `github`/`live` empty to point the buttons at #.
+const active = projects[0];
+---
+
+<div class="grid gap-6 lg:grid-cols-3 lg:gap-8 items-stretch">
+  {/* Left: selectable project list */}
+  <div class="flex flex-col gap-3 lg:col-span-1">
+    {
+      projects.map((project, i) => (
+        <button
+          type="button"
+          data-project={i}
+          class:list={[
+            "project-row group flex items-center justify-between gap-3 rounded-2xl border px-5 py-4 text-left transition-all duration-300",
+            i === 0
+              ? "is-active border-blue-500 bg-blue-500/10"
+              : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10",
+          ]}
+        >
+          <span class="project-name text-lg font-semibold text-neutral-400 transition-colors">
+            {project.name}
+          </span>
+          <ArrowUpRight class="project-icon w-5 h-5 text-neutral-500 transition-colors" />
+        </button>
+      ))
+    }
+  </div>
+
+  {/* Right: project details terminal panel */}
+  <div
+    class="dt-panel relative rounded-2xl border border-blue-500/40 bg-white/5 backdrop-blur-xl shadow-2xl shadow-blue-600/20 lg:col-span-2"
+  >
+    {/* Window header */}
+    <div class="flex items-center justify-between px-6 py-4">
+      <div class="flex gap-1.5">
+        <span class="w-3 h-3 rounded-full bg-red-500"></span>
+        <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+        <span class="w-3 h-3 rounded-full bg-green-500"></span>
+      </div>
+      <span
+        class="text-xs font-semibold uppercase tracking-widest text-neutral-500"
+      >
+        Project Details
+      </span>
+    </div>
+
+    <div
+      class="grid gap-8 border-t border-white/10 p-6 sm:p-8 md:h-[440px] md:grid-cols-2"
+    >
+      {/* Left column: title, description, pills, links.
+          Description flex-grows so the pills + buttons stay pinned to the
+          bottom no matter how long the description is. */}
+      <div class="flex min-h-0 flex-col md:h-full">
+        <div class="flex items-start justify-between">
+          <h3 id="dt-name" class="text-3xl font-bold text-white">
+            {active.name}
+          </h3>
+          <Rocket class="w-6 h-6 shrink-0 text-blue-400" />
+        </div>
+
+        <p
+          id="dt-description"
+          class="mt-4 flex-1 overflow-y-auto leading-relaxed text-neutral-400"
+        >
+          {active.description}
+        </p>
+
+        <div id="dt-stack" class="mt-6 flex flex-wrap gap-2">
+          {
+            active.stack.map((item) => (
+              <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-neutral-300">
+                {item}
+              </span>
+            ))
+          }
+        </div>
+
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a
+            id="dt-github"
+            href={active.github || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10"
+          >
+            <svg
+              class="w-4 h-4"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.39 1.24-3.23-.13-.3-.54-1.53.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.05.14 3 .4 2.29-1.55 3.3-1.23 3.3-1.23.65 1.65.24 2.88.12 3.18.77.84 1.23 1.92 1.23 3.23 0 4.62-2.81 5.64-5.49 5.94.43.37.82 1.1.82 2.22v3.29c0 .32.22.7.82.58A12.01 12.01 0 0 0 24 12.5C24 5.87 18.63.5 12 .5Z"
+              ></path>
+            </svg>
+            Code
+          </a>
+          <a
+            id="dt-live"
+            href={active.live || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-blue-600/20 transition-colors hover:bg-blue-500"
+          >
+            <ExternalLink class="w-4 h-4" />
+            Live Site
+          </a>
+        </div>
+      </div>
+
+      {/* Right column: site image */}
+      <div
+        id="dt-image-wrap"
+        class="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-slate-800 to-slate-900 md:aspect-auto md:h-full"
+      >
+        <img
+          id="dt-image"
+          src={active.image}
+          alt={active.name}
+          class="h-full w-full object-cover"
+          style={active.image ? "" : "display:none"}
+        />
+        <span
+          id="dt-image-fallback"
+          class="absolute inset-0 flex items-center justify-center text-sm text-neutral-500"
+          style={active.image ? "display:none" : ""}
+        >
+          Preview coming soon
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ projects }}>
+  const buttons = Array.from(document.querySelectorAll("[data-project]"));
+  const nameEl = document.getElementById("dt-name");
+  const descEl = document.getElementById("dt-description");
+  const stackEl = document.getElementById("dt-stack");
+  const imgEl = document.getElementById("dt-image");
+  const fallbackEl = document.getElementById("dt-image-fallback");
+  const githubEl = document.getElementById("dt-github");
+  const liveEl = document.getElementById("dt-live");
+
+  const renderStack = (stack) => {
+    stackEl.replaceChildren();
+    stack.forEach((item) => {
+      const pill = document.createElement("span");
+      pill.className =
+        "rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-neutral-300";
+      pill.textContent = item;
+      stackEl.appendChild(pill);
+    });
+  };
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const project = projects[Number(btn.dataset.project)];
+      if (!project) return;
+
+      nameEl.textContent = project.name;
+      descEl.textContent = project.description;
+      renderStack(project.stack);
+
+      if (project.image) {
+        imgEl.src = project.image;
+        imgEl.alt = project.name;
+        imgEl.style.display = "";
+        fallbackEl.style.display = "none";
+      } else {
+        imgEl.style.display = "none";
+        fallbackEl.style.display = "";
+      }
+
+      githubEl.href = project.github || "#";
+      liveEl.href = project.live || "#";
+
+      buttons.forEach((b) => {
+        const isActive = b === btn;
+        b.classList.toggle("is-active", isActive);
+        b.classList.toggle("border-blue-500", isActive);
+        b.classList.toggle("bg-blue-500/10", isActive);
+        b.classList.toggle("border-white/10", !isActive);
+        b.classList.toggle("bg-white/5", !isActive);
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Active row: name goes white, icon picks up the blue accent. */
+  .project-row.is-active .project-name {
+    color: #fff;
+  }
+  .project-row.is-active .project-icon {
+    color: #60a5fa;
+  }
+  .project-row:hover .project-name {
+    color: #e5e5e5;
+  }
+</style>
