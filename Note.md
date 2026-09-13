@@ -219,12 +219,189 @@ config needed** and the frontend code barely changes.
    (For this single-page portfolio it may be unnecessary, but add it if routes are
    introduced.)
 
-5. **Custom domain + HTTPS.**
+### Primer: registrar vs DNS host vs nameservers
+
+Owning a domain is really TWO separate services that can live at different
+companies:
+
+| Job                     | What it does                                                        | In our case            |
+| ----------------------- | ------------------------------------------------------------------ | ---------------------- |
+| **Domain registration** | The yearly "rental" of the name `bharatwebcrafts.com` from ICANN    | **GoDaddy (registrar)**|
+| **DNS hosting**         | The server that answers "what does `www.bharatwebcrafts.com` point to?" | GoDaddy by default - movable |
+
+- A **nameserver** is a server that holds your DNS records (A / CNAME / MX / TXT)
+  and answers lookups for your domain. They have names like `ns17.domaincontrol.com`
+  (GoDaddy), `elle.ns.cloudflare.com` (Cloudflare), `ns-123.awsdns-45.com` (Route 53).
+- At the registrar there is one field, **"Nameservers"**, and it is the ONLY thing
+  that decides WHO hosts your DNS. It is a pointer:
+
+  ```
+  Registrar (GoDaddy) --"the nameservers are..."--> DNS host --> actual records
+    owns the name                                   answers lookups   A / CNAME / MX
+  ```
+
+- **Yes, the domain and its DNS can be hosted at different companies.** That is how
+  DNS is designed to work, not a hack. GoDaddy stays the registrar (you keep paying
+  the yearly renewal there), while the records can live and be edited elsewhere by
+  changing that Nameservers field.
+
+This is exactly the mechanism behind the three paths below:
+- **Path A** - nameservers stay GoDaddy -> edit records in GoDaddy's DNS panel.
+- **Path B** - nameservers -> Route 53 -> edit records in Route 53.
+- **Path C** - nameservers -> Cloudflare -> edit records in Cloudflare.
+
+In all three, GoDaddy remains the registrar; only the DNS host changes.
+
+**Analogy:** the registrar is the government office that says the number is legally
+yours; the DNS host is the phone-book company that publishes which address that
+number rings through to. You can switch phone-book companies while keeping the same
+registered number - changing "Nameservers" tells the government which phone book to
+trust.
+
+**Caveat when switching nameservers:** the new DNS host does NOT automatically know
+your old records. Recreate all existing records (MX for email, TXT/verification,
+existing A/CNAME) at the new host before/at switch time, or things like email break
+because the old GoDaddy records stop being consulted. (Cloudflare tries to
+auto-import them - always verify.)
+
+#### Migrating DNS is all-or-nothing (you cannot "add" a second nameserver)
+
+A common misconception: "I'll just add Cloudflare as an extra nameserver and leave
+GoDaddy untouched." That does not work.
+
+- Nameserver delegation applies to the **entire zone**, not per record. When the
+  registrar's Nameservers field points to Cloudflare, **100% of lookups** for the
+  domain go to Cloudflare only. GoDaddy's records are no longer consulted at all.
+- You **cannot mix** providers (GoDaddy NS + Cloudflare NS in the same list).
+  Resolvers pick any one nameserver from the delegated set at random, and each
+  provider only knows its OWN records. If a resolver asks the "wrong" provider for a
+  record that only exists on the other, it gets "no such record" - so the site/email
+  fail **intermittently and unpredictably**. All nameservers in the set must return
+  identical answers, which only happens when they belong to the same provider.
+- Therefore, to migrate you **must recreate ALL records** (A, CNAME, MX, TXT, etc.)
+  at the new provider FIRST, then switch the Nameservers field. Cloudflare
+  auto-imports on setup - verify MX and TXT especially, since email is what usually
+  breaks.
+- "GoDaddy remains untouched" is only true in the sense that its stored records
+  still sit there but become **inert** (ignored). Switch the NS back and they light
+  up again; nothing is deleted, it just stops being authoritative.
+
+**The one real exception - subdomain delegation:** you can delegate a single
+subdomain to another provider by adding an **NS record** for it (e.g.
+`blog.bharatwebcrafts.com` -> Cloudflare) while the apex zone stays on GoDaddy. That
+is per-branch delegation, not "a second nameserver for the whole domain", and is not
+what a DNS migration is.
+
+**Status:** DNS has now been migrated to **Cloudflare** (Path C) - the nameservers at
+GoDaddy were switched to Cloudflare's. GoDaddy stays the registrar; all records are
+managed in Cloudflare from here on. Confirm MX/TXT records carried over so email and
+domain verification keep working.
+
+5. **Custom domain + HTTPS (registered at GoDaddy, DNS on Cloudflare).**
+
+   The domain `bharatwebcrafts.com` is registered at GoDaddy, but DNS is now hosted on
+   **Cloudflare** (nameservers switched). All DNS records are added in Cloudflare.
+   **Path C is the selected path** - Paths A and B below are reference only.
+
+   Prerequisites (apply regardless of path):
    - Request an **ACM certificate in us-east-1** (CloudFront requires the cert in
-     us-east-1 regardless of where other resources live).
-   - Add the domain as a CloudFront Alternate Domain Name (CNAME) and attach the
-     cert.
-   - Point DNS (Route 53 alias or a CNAME) at the CloudFront distribution.
+     us-east-1 regardless of where other resources live). Put BOTH names on the one
+     cert: `bharatwebcrafts.com` and `www.bharatwebcrafts.com`.
+   - Use **DNS validation**: ACM gives you CNAME record(s). Add them in **Cloudflare
+     DNS**. The cert stays "Pending validation" until those records resolve.
+   - On the CloudFront distribution, set **Alternate domain names (CNAMEs)** to both
+     `bharatwebcrafts.com` and `www.bharatwebcrafts.com`, and attach the ACM cert.
+
+   ### Path A - keep DNS at GoDaddy (simplest, no migration)
+
+   GoDaddy's DNS **cannot point the apex (`bharatwebcrafts.com`) at CloudFront**,
+   because the apex needs an A/ALIAS record and GoDaddy only allows a CNAME on
+   subdomains, not the apex. So serve the site on `www` and forward the apex to it.
+
+   In GoDaddy DNS (Domains -> DNS / Manage Zones):
+   - Add the ACM validation CNAME record(s) (name + value from ACM). Note: GoDaddy
+     appends the domain automatically, so paste only the host part of the ACM name
+     (strip the trailing `.bharatwebcrafts.com`).
+   - Add a **CNAME**: host `www` -> value = the CloudFront domain
+     (`dxxxx.cloudfront.net`).
+   - Handle the apex with GoDaddy **Domain Forwarding**: forward
+     `bharatwebcrafts.com` -> `https://www.bharatwebcrafts.com` as a **permanent
+     (301)** redirect with "Forward only". This makes `https://bharatwebcrafts.com`
+     land on the www site.
+   - Canonical URL becomes `https://www.bharatwebcrafts.com`; the bare domain
+     301-redirects to it. (GoDaddy's forwarder terminates HTTPS on the apex with its
+     own cert, which is fine for a redirect.)
+
+   ### Path B - move DNS hosting to Route 53 (NOT free)
+
+   This gives a clean apex served directly by CloudFront (no forwarder), but Route 53
+   charges **$0.50/month per hosted zone (~$6/year)** plus per-query fees. GoDaddy's
+   own DNS is included with the domain for free, so only take this path if you
+   specifically want Route 53 and accept the cost.
+   - In Route 53, create a **public hosted zone** for `bharatwebcrafts.com`.
+   - Copy the 4 **NS records** Route 53 assigns.
+   - In GoDaddy (Domain settings -> Nameservers), switch to **custom nameservers**
+     and paste those 4 Route 53 NS values. (Propagation can take up to ~48h.)
+   - Back in Route 53, add:
+     - the ACM validation CNAME record(s),
+     - an **A / Alias** record for the apex `bharatwebcrafts.com` -> the CloudFront
+       distribution (Alias supports the apex, which plain DNS cannot),
+     - an **A / Alias** (or CNAME) for `www` -> the CloudFront distribution.
+   - Now both the apex and `www` are served directly by CloudFront over HTTPS.
+
+   ### Path C - move DNS hosting to Cloudflare (FREE, clean apex)  ** <- SELECTED (DNS already migrated) **
+
+   This is the best of both worlds: a clean apex served by CloudFront with **no
+   monthly DNS cost**. Cloudflare's DNS is free and supports **CNAME flattening at
+   the apex**, which GoDaddy lacks and which is the whole reason Path A needs a
+   forwarder. Registration stays at GoDaddy.
+   - [DONE] Create a free Cloudflare account and add the site `bharatwebcrafts.com`;
+     Cloudflare imports existing records and gives you 2 nameservers.
+   - [DONE] In GoDaddy (Domain settings -> Nameservers), switch to **custom
+     nameservers** and paste Cloudflare's 2 NS values. (Propagation up to ~48h.)
+   - In Cloudflare DNS add:
+     - the ACM validation CNAME record(s),
+     - a **CNAME** for the apex `bharatwebcrafts.com` -> the CloudFront domain
+       (Cloudflare flattens this to A records automatically at the apex),
+     - a **CNAME** for `www` -> the CloudFront domain.
+   - Set these records to **DNS only** (grey cloud, proxy OFF) so CloudFront serves
+     traffic directly and terminates TLS with the ACM cert. (Leaving Cloudflare's
+     orange-cloud proxy ON would put a second CDN/cert in front of CloudFront -
+     avoid that here.)
+
+   **Decision: Path C is selected** - DNS has already been migrated to Cloudflare
+   (nameservers switched at GoDaddy). Registration stays at GoDaddy; all DNS records
+   are now managed in Cloudflare (free), and the apex can be served directly by
+   CloudFront via CNAME flattening - no forwarder needed. Paths A and B are kept
+   above only as reference alternatives.
+
+   ### Path C checklist (the selected path)
+
+   Already done:
+   - [DONE] Cloudflare account created, `bharatwebcrafts.com` added.
+   - [DONE] GoDaddy nameservers switched to Cloudflare's 2 NS values.
+   - Verify: existing records (especially **MX** for email and any **TXT**
+     verification) were carried over into Cloudflare, or email/verification breaks.
+
+   Remaining for the AWS custom-domain setup:
+   1. ACM cert (us-east-1) covering `bharatwebcrafts.com` + `www.bharatwebcrafts.com`,
+      DNS validation.
+   2. In **Cloudflare DNS**, add the ACM validation CNAME(s). Cloudflare appends the
+      zone automatically, so paste only the host part of the ACM name.
+   3. CloudFront: set Alternate domain names to both `bharatwebcrafts.com` and
+      `www.bharatwebcrafts.com`, attach the cert.
+   4. In Cloudflare DNS, add a **CNAME** for the apex `bharatwebcrafts.com` -> the
+      CloudFront domain (`dxxxx.cloudfront.net`); Cloudflare flattens it to A records
+      at the apex.
+   5. In Cloudflare DNS, add a **CNAME** for `www` -> the CloudFront domain.
+   6. Set all these records to **DNS only (grey cloud, proxy OFF)** so CloudFront
+      serves traffic directly and terminates TLS with the ACM cert. Leaving the
+      orange-cloud proxy ON stacks a second CDN/cert in front of CloudFront - avoid.
+
+   Result: both `https://bharatwebcrafts.com` (apex) and `https://www.bharatwebcrafts.com`
+   are served directly by CloudFront over HTTPS. No GoDaddy forwarder, no monthly DNS
+   cost. Pick whichever you want as canonical and 301 the other (a CloudFront
+   Function or a Cloudflare redirect rule can do the apex<->www redirect).
 
 ## Deploy / redeploy flow
 
@@ -265,3 +442,91 @@ Consider automating steps 1-3 in CI (GitHub Actions) on push to `main`.
   in the console.
 - **`FROM` address**: still must be a Resend-verified sender (see the VPS section);
   that requirement is independent of where the code runs.
+
+---
+
+# Manual build-out roadmap (no IaC - console/CLI by hand)
+
+Decision: build the AWS stack **manually** (console + CLI) for learning, not with
+IaC. IaC can come later once the manual flow is understood.
+
+## Guiding principles
+
+- **Go component by component, bottom-up.** Do NOT do "all code first" or "all infra
+  first". Build one layer, verify it in isolation, then stack the next.
+  Order is dictated by dependencies:
+  `code split -> Lambda -> S3 -> CloudFront -> cert + DNS -> CI/CD`.
+- **Test each layer via its OWN url before adding the next** - Lambda Function URL,
+  then the CloudFront default domain, then the custom domain last. If something
+  breaks you know exactly which phase caused it.
+- **Keep the current working setup alive** (local / VPS node) until AWS is fully
+  validated. Build AWS in parallel and cut DNS over only at the very end - never sit
+  in a broken state.
+- Use an **IAM user/role** for daily work, not the root account. Pick one region for
+  S3 + Lambda (e.g. `ap-south-1`); the ACM cert MUST be in **us-east-1**.
+
+## Phase 0 - Decide & prep
+
+- [ ] Confirm AWS account, working region, and that cert goes in us-east-1.
+- [ ] Have `RESEND_API_KEY` ready.
+- [ ] Create/verify an IAM user or role for yourself (not root); log in with it.
+
+## Phase 1 - Code changes (must come first; infra needs the artifacts)
+
+- [ ] Extract the contact logic from `src/pages/api/contact.ts` into a standalone
+      **Lambda handler** (same Resend call, Lambda signature).
+- [ ] Switch `astro.config.mjs` to **pure static** (remove node adapter + env schema).
+- [ ] `bun run build` and verify `dist/` has static files only (no `dist/server/`).
+- [ ] Verify the Lambda handler runs/tests locally.
+- Checkpoint: you have a static `dist/` and a zippable Lambda handler; nothing on AWS.
+
+## Phase 2 - Lambda (dynamic piece, isolated)
+
+- [ ] Create an IAM **execution role** for the Lambda (basic logging perms).
+- [ ] Create the **Lambda function**, upload the handler, set `RESEND_API_KEY` env var.
+- [ ] Enable the **Function URL** (auth `NONE` for now).
+- [ ] `curl` the Function URL with a fake contact payload; confirm the email arrives.
+- Checkpoint: contact backend works standalone, before any CDN.
+
+## Phase 3 - S3 (static piece, isolated)
+
+- [ ] Create a **private** bucket (block ALL public access; do NOT enable S3 website
+      hosting).
+- [ ] Upload `dist/` (cache headers come later in Phase 6).
+- Checkpoint: files in S3, bucket private (verified via CloudFront next, not directly).
+
+## Phase 4 - CloudFront (glue tying S3 + Lambda together)
+
+- [ ] Create distribution with **Origin A = S3 via OAC** (paste the generated bucket
+      policy).
+- [ ] Set **default root object** = `index.html`.
+- [ ] Test the CloudFront default domain (`dxxxx.cloudfront.net`) - static site loads.
+- [ ] Add **Origin B = Lambda Function URL** + behavior **`/api/*`** -> Lambda,
+      caching disabled, POST allowed, forward body + `Content-Type`.
+- [ ] Test `https://dxxxx.cloudfront.net/api/contact` - form works same-origin.
+- Checkpoint: full site AND contact form work on the CloudFront URL, no custom domain.
+
+## Phase 5 - Custom domain + HTTPS (DNS on Cloudflare)
+
+- [ ] Request **ACM cert in us-east-1** for apex + `www`; add validation CNAMEs in
+      Cloudflare DNS (grey cloud).
+- [ ] Add both domains as CloudFront **Alternate domain names**; attach the cert.
+- [ ] In Cloudflare, point apex + `www` at the CloudFront domain (**DNS only / grey
+      cloud**).
+- [ ] Test `https://bharatwebcrafts.com` end to end.
+- Checkpoint: real domain serves site + form over HTTPS.
+
+## Phase 6 - Cut over & caching
+
+- [ ] Decommission the old VPS/node deployment once AWS is validated.
+- [ ] Apply the cache-header strategy: immutable/long cache for hashed `_astro/*`
+      assets, `no-cache` for HTML.
+- [ ] Do a **manual CloudFront invalidation** once, by hand, to understand it before
+      automating.
+
+## Phase 7 - CI/CD (only after manual works)
+
+- [ ] Wrap the proven manual steps into a pipeline (build -> S3 sync with headers ->
+      invalidate -> optional Lambda update).
+- [ ] Use **GitHub OIDC** to assume an IAM role (no long-lived access keys).
+- [ ] Path-filter jobs so site-only changes skip the Lambda deploy.
