@@ -471,39 +471,57 @@ IaC. IaC can come later once the manual flow is understood.
 - [ ] Have `RESEND_API_KEY` ready.
 - [ ] Create/verify an IAM user or role for yourself (not root); log in with it.
 
-## Phase 1 - Code changes (must come first; infra needs the artifacts)
+## Phase 1 - Code changes (must come first; infra needs the artifacts)  ** <- DONE **
 
-- [ ] Extract the contact logic from `src/pages/api/contact.ts` into a standalone
-      **Lambda handler** (same Resend call, Lambda signature).
-- [ ] Switch `astro.config.mjs` to **pure static** (remove node adapter + env schema).
-- [ ] `bun run build` and verify `dist/` has static files only (no `dist/server/`).
-- [ ] Verify the Lambda handler runs/tests locally.
-- Checkpoint: you have a static `dist/` and a zippable Lambda handler; nothing on AWS.
+- [DONE] Extracted the contact logic into a standalone **Lambda handler** at
+      `lambda/contact/index.mjs` (same Resend call + email HTML; Function URL
+      payload-format-2.0 signature; `RESEND_API_KEY` read from `process.env`).
+      Own `package.json` pins `resend@^6.28.0`.
+- [DONE] Switched `astro.config.mjs` to **pure static** - removed the node adapter
+      and the `RESEND_API_KEY` env schema; also removed the `@astrojs/node`
+      dependency. Deleted the old SSR route `src/pages/api/contact.ts`.
+- [DONE] `bun run build` -> builds as `mode: "static"`; verified `dist/` has no
+      `dist/server/` and no `entry.mjs`.
+- [DONE] Verified the handler locally via `lambda/contact/test-local.mjs`: 405 on
+      GET, 400 on empty/malformed body, and a real 200 send when `RESEND_API_KEY`
+      is present (confirmed a live Resend email).
+- Checkpoint: static `dist/` + a zippable Lambda handler in `lambda/contact/`;
+  nothing on AWS yet. Frontend still POSTs to `/api/contact` (unchanged).
 
-## Phase 2 - Lambda (dynamic piece, isolated)
+## Phase 2 - Lambda (dynamic piece, isolated)  ** <- DONE **
 
-- [ ] Create an IAM **execution role** for the Lambda (basic logging perms).
-- [ ] Create the **Lambda function**, upload the handler, set `RESEND_API_KEY` env var.
-- [ ] Enable the **Function URL** (auth `NONE` for now).
-- [ ] `curl` the Function URL with a fake contact payload; confirm the email arrives.
+- [DONE] Created an IAM **execution role** for the Lambda (basic logging perms).
+- [DONE] Created the **Lambda function**, uploaded the handler, set `RESEND_API_KEY`
+      env var. Verified handler logic via the console **Test** tab (payload-format-2.0
+      event: POST -> 200, GET -> 405, empty/malformed body -> 400).
+- [DONE] Enabled the **Function URL** (auth `NONE` for now; no CORS - CloudFront will
+      make it same-origin).
+- [DONE] `curl`ed the Function URL with a contact payload; confirmed a real 200 send.
+- **Function URL (ap-south-1):**
+  `https://paitb26pgo2fguvlq2z3dasg4e0vrifc.lambda-url.ap-south-1.on.aws/`
+  (this becomes CloudFront Origin B in Phase 4; `/api/*` behavior forwards here.)
 - Checkpoint: contact backend works standalone, before any CDN.
 
-## Phase 3 - S3 (static piece, isolated)
+## Phase 3 - S3 (static piece, isolated)  ** <- DONE **
 
-- [ ] Create a **private** bucket (block ALL public access; do NOT enable S3 website
-      hosting).
-- [ ] Upload `dist/` (cache headers come later in Phase 6).
+- [DONE] Created a **private** bucket `bharatwebcrafts-site` (ap-south-1); Block ALL
+      public access ON; static website hosting Disabled.
+- [DONE] Uploaded the latest `dist/` (fresh build; cache headers come later in Phase 6).
 - Checkpoint: files in S3, bucket private (verified via CloudFront next, not directly).
 
-## Phase 4 - CloudFront (glue tying S3 + Lambda together)
+## Phase 4 - CloudFront (glue tying S3 + Lambda together)  ** <- DONE **
 
-- [ ] Create distribution with **Origin A = S3 via OAC** (paste the generated bucket
-      policy).
-- [ ] Set **default root object** = `index.html`.
-- [ ] Test the CloudFront default domain (`dxxxx.cloudfront.net`) - static site loads.
-- [ ] Add **Origin B = Lambda Function URL** + behavior **`/api/*`** -> Lambda,
-      caching disabled, POST allowed, forward body + `Content-Type`.
-- [ ] Test `https://dxxxx.cloudfront.net/api/contact` - form works same-origin.
+- [DONE] Created distribution with **Origin A = S3 via OAC** (pasted the generated
+      bucket policy scoped to this distribution). Distribution ID **EUJI73Y1I8GVF**;
+      OAC ID **E3EML078AX22HN**.
+- [DONE] Set **default root object** = `index.html`.
+- [DONE] Tested the CloudFront default domain - static site loads.
+- [DONE] Added **Origin B = Lambda Function URL** + behavior **`/api/*`** -> Lambda,
+      caching disabled (CachingDisabled), POST allowed, origin request policy
+      **AllViewerExceptHostHeader** (forwards body + `Content-Type`, strips `Host` so
+      the Function URL accepts the request).
+- [DONE] Tested `/api/contact` through CloudFront - form works same-origin.
+- **CloudFront default domain:** `https://dyha047ia29yg.cloudfront.net/`
 - Checkpoint: full site AND contact form work on the CloudFront URL, no custom domain.
 
 ## Phase 5 - Custom domain + HTTPS (DNS on Cloudflare)
