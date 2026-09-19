@@ -1,0 +1,152 @@
+name: CI/CD
+
+# Deploys the Astro portfolio to the AWS stack built in Phases 1-6:
+#   static site  -> S3 (bharatwebcrafts-site) served via CloudFront (EUJI73Y1I8GVF)
+#   /api/contact -> Lambda (Function URL) behind the same CloudFront distribution
+#
+# This wraps the exact manual flow proven in Phase 6:
+#   bun run build  ->  two-pass S3 sync with cache headers  ->  CloudFront invalidation
+#
+# Required repo configuration (Settings -> Secrets and variables -> Actions):
+#   secrets.AWS_DEPLOY_ROLE_ARN  - IAM role ARN assumed via GitHub OIDC (no long-lived keys).
+#                                  Trust policy must allow this repo's OIDC subject; the role
+#                                  needs s3:PutObject/DeleteObject/ListBucket on the bucket,
+#                                  cloudfront:CreateInvalidation on the distribution, and
+#                                  lambda:UpdateFunctionCode on the contact function.
+#
+# Before the first run: confirm LAMBDA_FUNCTION_NAME below matches the real function name.
+
+on:
+  push:
+    branches:
+      - main
+  # Manual "deploy now" button in the Actions tab. A manual run forces BOTH the site
+  # and Lambda deploys (see the if: conditions below), since there's no diff to filter.
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  id-token: write # required for GitHub OIDC -> assume the AWS role
+  contents: read
+
+env:
+  AWS_REGION: ap-south-1
+  S3_BUCKET: bharatwebcrafts-site
+  CLOUDFRONT_DISTRIBUTION_ID: EUJI73Y1I8GVF
+  LAMBDA_FUNCTION_NAME: contact-form 
+
+jobs:
+  # 0) Detect what changed so a site-only push skips the Lambda job and vice-versa.
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    outputs:
+      site: ${{ steps.filter.outputs.site }}
+      lambda: ${{ steps.filter.outputs.lambda }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            site:
+              - 'src/**'
+              - 'public/**'
+              - 'astro.config.mjs'
+              - 'package.json'
+              - 'bun.lock'
+              - '.github/workflows/ci-cd.yml'
+            lambda:
+              - 'lambda/**'
+
+  # 1) Build the static site and deploy it to S3 + invalidate CloudFront.
+  deploy-site:
+    name: Build & deploy site
+    needs: changes
+    if: needs.changes.outputs.site == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build
+        # RESEND_API_KEY lives only in Lambda now, so the static build needs no secrets.
+        run: bun run build
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # Pass 1: hashed assets in _astro/ never change under a given name -> cache forever.
+      - name: Sync hashed assets (immutable)
+        run: |
+          aws s3 sync dist/_astro/ "s3://${S3_BUCKET}/_astro/" \
+            --delete \
+            --cache-control "public, max-age=31536000, immutable"
+
+      # Pass 2: HTML + public/ assets keep stable names -> must revalidate. --exclude keeps
+      # this pass from touching (or deleting) the _astro/ objects handled in pass 1.
+      - name: Sync HTML and public assets (no-cache)
+        run: |
+          aws s3 sync dist/ "s3://${S3_BUCKET}" \
+            --delete \
+            --exclude "_astro/*" \
+            --cache-control "no-cache"
+
+      # Hashed assets get new names each build and never need invalidating; "/*" is one path
+      # (free tier) and guarantees the no-cache HTML/images are refreshed at the edge.
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${CLOUDFRONT_DISTRIBUTION_ID}" \
+            --paths "/*"
+
+  # 2) Deploy the contact Lambda only when lambda/** changes.
+  deploy-lambda:
+    name: Deploy contact Lambda
+    needs: changes
+    if: needs.changes.outputs.lambda == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install production dependencies
+        working-directory: lambda/contact
+        run: bun install --frozen-lockfile --production
+
+      - name: Package handler
+        working-directory: lambda/contact
+        # Zip the handler plus its runtime deps. RESEND_API_KEY is set on the function
+        # itself (Lambda env var), never in this zip.
+        run: zip -r ../contact-lambda.zip index.mjs package.json node_modules
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Update function code
+        run: |
+          aws lambda update-function-code \
+            --function-name "${LAMBDA_FUNCTION_NAME}" \
+            --zip-file fileb://lambda/contact-lambda.zip

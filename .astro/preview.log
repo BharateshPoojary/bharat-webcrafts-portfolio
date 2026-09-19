@@ -1,0 +1,16 @@
+{"message":"Enabling sessions with filesystem storage","label":"@astrojs/node","level":"info"}
+{"message":"Server listening on http://localhost:4321","label":"@astrojs/node","level":"info"}
+11:51:18 [ERROR] EnvInvalidVariables: The following environment variables defined in `env.schema` are invalid:
+
+- RESEND_API_KEY is missing
+
+    at createInvalidVariablesError (file:///Users/bharat/Developer/bharat-webcrafts-portfolio/dist/server/chunks/runtime_DXgN101-.mjs:25:9)
+    at _internalGetSecret (file:///Users/bharat/Developer/bharat-webcrafts-portfolio/dist/server/chunks/contact_C-kphAix.mjs:119:8)
+    at file:///Users/bharat/Developer/bharat-webcrafts-portfolio/dist/server/chunks/contact_C-kphAix.mjs:124:22
+    at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:654:26)
+    at async getModuleForRoute (file:///Users/bharat/Developer/bharat-webcrafts-portfolio/dist/server/entry.mjs:1335:10)
+    at async Object.getComponentByRoute (file:///Users/bharat/Developer/bharat-webcrafts-portfolio/dist/server/entry.mjs:1340:10)
+    at async FetchState.getProps (file:///Users/bharat/Developer/bharat-webcrafts-portfolio/dist/server/entry.mjs:3874:15)
+    at async handleMiddleware (file:///Users/bharat/Developer/bharat-webcrafts-portfolio/dist/server/entry.mjs:3073:2)
+    at async render (file:///Users/bharat/Developer/bharat-webcrafts-portfolio/dist/server/entry.mjs:4560:15)

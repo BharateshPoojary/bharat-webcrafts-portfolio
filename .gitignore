@@ -6,6 +6,9 @@ out
 dist
 *.tgz
 
+# lambda deployment artifacts (zipped for upload in Phase 2)
+lambda/**/*.zip
+
 # code coverage
 coverage
 *.lcov

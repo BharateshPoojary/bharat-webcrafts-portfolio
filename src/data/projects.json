@@ -3,24 +3,24 @@
     "name": "Ask-pdf",
     "description": "A full-stack RAG chatbot that lets users chat with uploaded PDFs - LangChain, Gemini 2.5 Flash, and Pinecone vector search with real-time response streaming.",
     "stack": ["Next.js 15", "TypeScript", "LangChain", "Pinecone", "Gemini 2.5", "Clerk"],
-    "image": "",
-    "github": "",
-    "live": ""
+    "image": "/Ask-pdf.png",
+    "github": "https://github.com/BharateshPoojary/ask-pdf",
+    "live": "https://ask-pdf.bharatwebcrafts.com"
   },
   {
     "name": "Anonytalks",
     "description": "A self-hosted social platform for anonymous, direct media sharing via unique shareable links, with AWS S3 uploads and NextAuth (Google OAuth + password).",
     "stack": ["Next.js", "TypeScript", "Redux", "AWS S3", "NextAuth", "Resend"],
-    "image": "",
-    "github": "",
-    "live": ""
+    "image": "/Anonytalks.png",
+    "github": "https://github.com/BharateshPoojary/anonytalks",
+    "live": "https://anonytalks.bharatwebcrafts.com/"
   },
   {
-    "name": "Project 3",
-    "description": "Content to be added.",
-    "stack": ["TBD"],
-    "image": "",
-    "github": "",
-    "live": ""
+    "name": "Xtract",
+    "description": "A full-stack bank-statement PDF text extractor that lets users upload statements and view the extracted data in a structured table - AWS Textract for OCR, SNS pub/sub to signal extraction completion, Gemini 2.5 Flash to structure the raw text, and TanStack Table for tabular display.",
+    "stack": ["AWS Textract", "AWS SNS", "Gemini 2.5", "TanStack Table"],
+    "image": "/Xtractpdf.png",
+    "github": "https://github.com/BharateshPoojary/Xtract",
+    "live": "https://xtract.bharatwebcrafts.com/"
   }
 ]

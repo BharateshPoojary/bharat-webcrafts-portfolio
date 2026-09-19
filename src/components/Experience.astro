@@ -1,59 +1,8 @@
 ---
 import Heading from "./common/Heading.astro";
-import FeatureCard from "./common/Feature-card.astro";
 import TimelineItem from "./common/TimelineItem.astro";
 import TimelineLogo from "./common/TimelineLogo.astro";
 import timeline from "../data/timeline.json";
-import {
-  Globe,
-  Landmark,
-  Scaling,
-  ShieldCheck,
-  ArrowRight,
-  ArrowLeftRight,
-  Lock,
-  Smartphone,
-  Fingerprint,
-  BadgeCheck,
-  ShieldAlert,
-  Activity,
-} from "@lucide/astro";
-
-// Global Payments - currency conversion rows
-const conversions = [
-  { flag: "🇺🇸", amount: "$1,237.58", code: "USD", to: "€1,130.32", toFlag: "🇪🇺", active: true },
-  { flag: "🇺🇸", amount: "$1,237.58", code: "USD", to: "€972.29", toFlag: "🇪🇺", active: false },
-  { flag: "🇺🇸", amount: "$1,237.58", code: "USD", to: "¥186,139.31", toFlag: "🇯🇵", active: false },
-  { flag: "🇺🇸", amount: "$1,237.58", code: "USD", to: "A$1,864.74", toFlag: "🇦🇺", active: false },
-];
-
-// Banking as a Service - create card form fields
-const cardFields = [
-  { label: "Cardholder Name", value: "Michael Johnson" },
-  { label: "Card Type", value: "Virtual" },
-  { label: "Card Network", value: "Visa" },
-  { label: "Currency", value: "USD" },
-];
-
-// Scalability - API reference table
-const apiRows = [
-  { category: "Payments", method: "POST", path: "/payments", purpose: "Process transactions at scale" },
-  { category: "Multi-Currency", method: "GET", path: "/exchange-rates", purpose: "Access low FX rates for 100+ currencies" },
-  { category: "User Management", method: "POST", path: "/users", purpose: "Create & manage customers dynamically" },
-  { category: "Security", method: "POST", path: "/fraud-detection", purpose: "AI-powered fraud detection for safe scaling" },
-  { category: "Scalability", method: "GET", path: "/server-status", purpose: "Monitor infrastructure health & uptime" },
-  { category: "Custom Workflows", method: "POST", path: "/webhooks", purpose: "Automate workflows with real-time webhooks" },
-];
-
-// Compliance & Security - feature tiles
-const complianceTiles = [
-  { icon: Lock, label: "Tokenization" },
-  { icon: Smartphone, label: "MFA" },
-  { icon: Fingerprint, label: "Fraud Detection" },
-  { icon: BadgeCheck, label: "PCI DSS Compliance" },
-  { icon: ShieldAlert, label: "Dispute Protection" },
-  { icon: Activity, label: "Monitoring" },
-];
 ---
 
 <section
@@ -75,7 +24,7 @@ const complianceTiles = [
     <Heading
       text="Experience & Education"
       heading="My Journey So Far"
-      description="A timeline of the roles I've shipped in and the education that shaped how I build."
+      description="The roles and education that shaped how I build."
       type="light"
     />
 

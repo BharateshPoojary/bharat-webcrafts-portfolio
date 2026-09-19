@@ -524,27 +524,202 @@ IaC. IaC can come later once the manual flow is understood.
 - **CloudFront default domain:** `https://dyha047ia29yg.cloudfront.net/`
 - Checkpoint: full site AND contact form work on the CloudFront URL, no custom domain.
 
-## Phase 5 - Custom domain + HTTPS (DNS on Cloudflare)
+## Phase 5 - Custom domain + HTTPS (DNS on Cloudflare)  ** <- DONE **
 
-- [ ] Request **ACM cert in us-east-1** for apex + `www`; add validation CNAMEs in
-      Cloudflare DNS (grey cloud).
-- [ ] Add both domains as CloudFront **Alternate domain names**; attach the cert.
-- [ ] In Cloudflare, point apex + `www` at the CloudFront domain (**DNS only / grey
-      cloud**).
-- [ ] Test `https://bharatwebcrafts.com` end to end.
+- [DONE] Requested **ACM cert in us-east-1** covering `bharatwebcrafts.com` +
+      `www.bharatwebcrafts.com` (DNS validation). Added both validation CNAMEs in
+      Cloudflare DNS (grey cloud); cert reached **Issued**. Leave those two `_...`
+      CNAMEs in place permanently - ACM re-checks them for auto-renewal.
+- [DONE] Added both domains as CloudFront **Alternate domain names** on distribution
+      **EUJI73Y1I8GVF** and attached the ACM cert. Cert SANs verified to list both
+      hostnames.
+- [DONE] In Cloudflare, pointed apex + `www` at `dyha047ia29yg.cloudfront.net` as
+      **CNAMEs, DNS only / grey cloud** (apex uses Cloudflare CNAME flattening).
+- [DONE] Tested end to end: both `https://bharatwebcrafts.com` and
+      `https://www.bharatwebcrafts.com` return HTTP 200 with a valid cert
+      (`x-cache: Hit from cloudfront`), and `GET /api/contact` returns **405**
+      (routed to Lambda, no email sent) - confirming static + dynamic both work on
+      the real domain over HTTPS.
 - Checkpoint: real domain serves site + form over HTTPS.
 
 ## Phase 6 - Cut over & caching
 
-- [ ] Decommission the old VPS/node deployment once AWS is validated.
-- [ ] Apply the cache-header strategy: immutable/long cache for hashed `_astro/*`
-      assets, `no-cache` for HTML.
-- [ ] Do a **manual CloudFront invalidation** once, by hand, to understand it before
-      automating.
+- [DONE] Applied the cache-header strategy: hashed `_astro/*` assets set to
+      `public, max-age=31536000, immutable`; `index.html` and the `public/` files
+      (images, favicons) set to `no-cache`. Set via S3 object metadata (System
+      defined -> `Cache-Control`).
+- [DONE] Ran a **manual CloudFront invalidation** (`/*`) by hand on distribution
+      **EUJI73Y1I8GVF**. Confirmed it was needed because the edge was serving a stale
+      pre-header copy of `index.html`. Verified after completion:
+      `curl -sI` shows `immutable` on the hashed CSS and `no-cache` on `/`.
+
+### Caching strategy: content hashing + Cache-Control tiers
+
+**The problem.** Caching forces a trade-off: cache too long and users get stale
+files after a deploy; cache too short and everything re-downloads on every visit.
+**Content hashing** removes the trade-off for build assets.
+
+**What "hashed" means.** Astro (via Vite) hashes files that go through its build
+pipeline (imported CSS/JS/images) and emits them into `_astro/` with a content
+fingerprint in the name, e.g. `_astro/index.20kG6pLY.css`. The rule:
+
+- Same content -> same hash -> same filename.
+- Content changes by even one byte -> new hash -> a brand-new filename, and the
+  HTML that references it is rebuilt to point at the new name.
+
+So a hashed file's content can never change under a given name. You never "update"
+it - you replace it with a differently-named file. The filename IS the cache-buster:
+no query strings, no manual asset invalidation.
+
+**Only `_astro/*` is hashed.** Everything copied from `public/` (the PNGs,
+`favicon.ico`, `favicon.svg`) keeps a fixed name on purpose - predictable URLs are
+the whole point of `public/` (the browser must find `/favicon.ico` literally).
+`index.html` also keeps a fixed name; it is the entry point that references the
+hashed assets. Files with a stable name therefore CANNOT be marked `immutable`.
+
+**Three tiers, not two:**
+
+| Tier                    | Files here                | Cache-Control                              | Reasoning                                          |
+| ----------------------- | ------------------------- | ------------------------------------------ | -------------------------------------------------- |
+| 1. Immutable            | `_astro/index.20kG6pLY.css` | `public, max-age=31536000, immutable`    | Content change -> new filename, so cache forever   |
+| 2. Revalidate always    | `index.html`              | `no-cache`                                 | Same name, must always point at newest asset hashes |
+| 3. Cache-but-revalidate | `*.png`, `favicon.*`      | short `max-age` + `must-revalidate`, OR `no-cache` | Same name, content rarely changes but can   |
+
+Notes on each tier:
+
+- **`immutable`** means more than "cache 1 year" - it also tells the browser not to
+  send a revalidation request even on a hard refresh. Safe only because the name
+  changes when content changes.
+- **`no-cache`** does NOT mean "don't cache". It means "cache it, but always
+  revalidate with the server before using it." HTML is tiny, so a `304 Not Modified`
+  check is cheap and guarantees users always get HTML pointing at the newest hashes.
+- **Tier 3** exists because images/favicons keep a stable name but change rarely.
+  Either treat them like HTML (`no-cache`, cheap `304`s), or give them a moderate
+  cache (`max-age=86400` = 1 day) and accept up to a day of staleness after you
+  replace one (or invalidate that path when you do).
+
+**How to apply it (S3 object metadata, set at upload time):**
+
+```bash
+# 1. Hashed assets -> immutable
+aws s3 sync dist/_astro/ s3://bharatwebcrafts-site/_astro/ \
+  --delete --cache-control "public, max-age=31536000, immutable"
+
+# 2. Everything else (HTML + images + favicons) -> revalidate
+aws s3 sync dist/ s3://bharatwebcrafts-site \
+  --delete --exclude "_astro/*" \
+  --cache-control "no-cache"
+```
+
+(Optional third pass to give images a 1-day cache instead of `no-cache`:
+`--include "*.png" --include "*.ico" --include "*.svg"
+--cache-control "public, max-age=86400"`.)
+
+Because HTML is `no-cache`, a CloudFront invalidation of `/*` (or `/*.html`) after
+each deploy makes the edge serve the new HTML immediately - which ties into the
+manual-invalidation item above.
 
 ## Phase 7 - CI/CD (only after manual works)
 
-- [ ] Wrap the proven manual steps into a pipeline (build -> S3 sync with headers ->
-      invalidate -> optional Lambda update).
-- [ ] Use **GitHub OIDC** to assume an IAM role (no long-lived access keys).
-- [ ] Path-filter jobs so site-only changes skip the Lambda deploy.
+- [IN PROGRESS] Drafted `.github/workflows/ci-cd.yml` wrapping the proven manual
+      steps: `bun run build` -> two-pass S3 sync (immutable for `_astro/*`, `no-cache`
+      for the rest) -> CloudFront `/*` invalidation. A separate `deploy-lambda` job
+      re-zips and `aws lambda update-function-code` when `lambda/**` changes.
+- [x] Uses **GitHub OIDC** (`aws-actions/configure-aws-credentials` with
+      `role-to-assume`, `permissions: id-token: write`) - no long-lived access keys.
+- [x] Path-filtered with `dorny/paths-filter`: site-only pushes skip the Lambda job
+      and lambda-only pushes skip the site deploy.
+- Before first run, still to do:
+  - [ ] Create the IAM role for OIDC (trust this repo; grant s3 put/delete/list,
+        cloudfront:CreateInvalidation, lambda:UpdateFunctionCode) and add its ARN as
+        the `AWS_DEPLOY_ROLE_ARN` repo secret.
+  - [ ] Confirm `LAMBDA_FUNCTION_NAME` in the workflow matches the real function name
+        (Function URL is in Phase 2; the function's *name* is not recorded here yet).
+
+---
+
+# Archived: retired Docker / VPS deployment (kept for reference)
+
+The project originally deployed as a **Node SSR container** (Astro `@astrojs/node`
+standalone) built into a Docker image, pushed to Docker Hub, and run on a VPS via
+`docker compose`. That approach is **no longer used** - the site is now pure static
+on S3 + CloudFront with the contact route on Lambda (Phases 1-6). The Docker/compose
+files and the old container-based CI are retired; their contents are preserved below
+so the approach can be revived if ever needed.
+
+## `Dockerfile` (retired)
+
+```dockerfile
+# syntax=docker/dockerfile:1
+
+# ---- Build stage: install all deps and produce dist/ ----
+FROM oven/bun:1 AS build
+WORKDIR /app
+
+# Install dependencies first (better layer caching).
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
+
+# Build the Astro site (static pages + Node standalone server in dist/).
+COPY . .
+RUN bun run build
+
+# ---- Runtime stage: only production deps + build output ----
+FROM oven/bun:1-slim AS runtime
+WORKDIR /app
+ENV NODE_ENV=production
+
+# Only the dependencies needed to run the server.
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile --production
+
+# The built server (dist/server/entry.mjs) and static assets (dist/client).
+COPY --from=build /app/dist ./dist
+
+# The Node standalone server reads HOST/PORT from the environment.
+ENV HOST=0.0.0.0
+ENV PORT=4321
+EXPOSE 4321
+
+# RESEND_API_KEY must be provided at run time (docker run -e / compose / secrets).
+CMD ["bun", "./dist/server/entry.mjs"]
+
+# Environment variables which we mentioned here are available to anyone who is pulling this image if public
+```
+
+Note: this Dockerfile assumes the **Node SSR** build (`dist/server/entry.mjs`), which
+requires the `@astrojs/node` adapter in `astro.config.mjs`. The current config is
+`output: "static"` with no adapter, so reviving Docker would also mean re-adding the
+adapter (see the "Deployment (Hostinger VPS + Node SSR)" section above).
+
+## `compose.yml` (retired)
+
+```yaml
+services:
+  web:
+    # Local dev: `docker compose up -d --build` builds and tags as :local.
+    # On the VM: set IMAGE=<dockerhub-user>/bharat-portfolio:latest in .env so
+    # `docker compose pull web` pulls the CI-pushed image instead of building.
+    build: .
+    image: ${IMAGE:-bharat-portfolio:local}
+    container_name: bharat-portfolio
+    restart: unless-stopped
+    ports:
+      - "4321:4321"
+    environment:
+      # Injected at runtime, NOT baked into the image. Compose substitutes this
+      # from the host environment or a gitignored .env file in this directory.
+      - RESEND_API_KEY=${RESEND_API_KEY:?set RESEND_API_KEY in .env}
+      - HOST=0.0.0.0
+      - PORT=4321
+```
+
+## Old container-based CI (retired)
+
+The previous `ci-cd.yml` had three jobs: **build** (fail fast), **build-and-push**
+(Docker Buildx -> Docker Hub with `latest` + `${{ github.sha }}` tags and a registry
+buildcache), and **deploy** (SSH to the VM via `appleboy/ssh-action`, then
+`docker compose pull web && docker compose up -d web && docker image prune -f`). It
+relied on the secrets `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`, `VM_HOST`, `VM_USER`,
+and `VM_SSH_KEY`. It has been replaced by the OIDC-based S3/CloudFront/Lambda pipeline
+documented in Phase 7.

@@ -1,0 +1,11 @@
+{
+  "name": "contact-lambda",
+  "version": "1.0.0",
+  "description": "Contact form Lambda (Resend) for bharatwebcrafts.com",
+  "type": "module",
+  "main": "index.mjs",
+  "private": true,
+  "dependencies": {
+    "resend": "^6.28.0"
+  }
+}

@@ -2,41 +2,13 @@
 import BgpatternAstroComponent from "./common/Bgpattern.astro";
 import Background from "./common/Background.astro";
 import BlueText from "./common/Blue-text.astro";
-import Amazon from "./logo/Amazon.astro";
-import Dropbox from "./logo/Drop-box.astro";
-import Loom from "./logo/Loom.astro";
-import Slack from "./logo/Slack.astro";
 import { ArrowRight, CodeXml, Mail } from "@lucide/astro";
-
-// Footer navigation, kept as data so columns stay easy to edit.
-const columns = [
-  {
-    title: "Explore",
-    links: ["Home", "Projects", "Experience", "About"],
-  },
-  {
-    title: "Services",
-    links: ["Web Apps", "APIs & Backends", "AI Integration", "Consulting"],
-  },
-  {
-    title: "Resources",
-    links: ["Blog", "Resume", "Case Studies", "GitHub"],
-  },
-  {
-    title: "Connect",
-    links: ["LinkedIn", "GitHub", "Twitter / X", "Dribbble"],
-  },
-  {
-    title: "Legal",
-    links: ["Privacy Policy", "Terms of Service"],
-  },
-];
 ---
 
 <footer
   id="contact"
   data-nav-theme="light"
-  class="relative w-full bg-white text-slate-900 font-sans overflow-hidden"
+  class="relative flex min-h-screen w-full flex-col justify-center bg-white text-slate-900 font-sans overflow-hidden"
 >
   {/* Subtle dot grid behind the whole footer */}
   <div
@@ -48,15 +20,17 @@ const columns = [
   >
   </div>
 
-  <div class="relative z-10 mx-auto w-full max-w-7xl xl:max-w-360 px-6 lg:px-8 py-12 sm:py-16">
+  <div
+    class="relative z-10 mx-auto w-full max-w-7xl xl:max-w-360 px-6 lg:px-8 py-12 sm:py-16"
+  >
     {/* CTA card */}
-    <div
-      class="relative overflow-hidden rounded-3xl bg-[#020617] text-white"
-    >
+    <div class="relative overflow-hidden rounded-3xl bg-[#020617] text-white">
       <BgpatternAstroComponent />
       <Background />
 
-      <div class="relative z-10 flex flex-col items-center text-center px-6 pt-16 pb-10">
+      <div
+        class="relative z-10 flex flex-col items-center text-center px-6 pt-16 pb-10"
+      >
         <BlueText text="Bharat Webcrafts" />
         <h2 class="mt-2 text-4xl sm:text-5xl font-semibold tracking-tight">
           Ready to Build Something Great?
@@ -66,105 +40,190 @@ const columns = [
           software.
         </p>
 
-        {/* Email capture */}
-        <form
-          class="mt-8 flex flex-row items-center gap-3 p-1.5 bg-white rounded-2xl w-full max-w-md shadow-2xl"
-        >
-          <div class="flex items-center flex-1 w-full gap-3 px-4 py-2">
-            <Mail class="w-5 h-5 text-slate-400" />
+        {/* Query capture - opens the visitor's mail client addressed to me */}
+        <form id="query-form" class="mt-8 flex w-full max-w-md flex-col gap-3">
+          <div
+            class="flex items-center gap-3 rounded-xl bg-white px-4 py-2.5 shadow-lg"
+          >
+            <Mail class="w-5 h-5 shrink-0 text-slate-400" />
             <input
               type="email"
-              placeholder="Send your email"
+              name="email"
+              required
+              placeholder="Your mail"
               class="w-full bg-transparent text-slate-900 placeholder:text-slate-400 focus:outline-none text-sm"
             />
           </div>
+          <textarea
+            name="query"
+            required
+            rows="3"
+            placeholder="Your query"
+            class="w-full resize-none rounded-xl bg-white px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none shadow-lg"
+          ></textarea>
           <button
             type="submit"
-            class="group flex items-center gap-2 whitespace-nowrap px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-500 transition-colors cursor-pointer"
+            id="query-submit"
+            class="group flex items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-500 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Get in Touch
+            <span id="query-submit-label">Send</span>
             <ArrowRight
               class="w-4 h-4 transition-transform group-hover:translate-x-1"
             />
           </button>
+          <p
+            id="query-status"
+            class="hidden text-sm"
+            role="status"
+            aria-live="polite"
+          >
+          </p>
         </form>
       </div>
 
-      {/* Logo strip */}
+      {/* Social links */}
       <div
-        class="relative z-10 flex flex-wrap items-center justify-center gap-x-12 gap-y-6 border-t border-white/5 px-6 py-8 text-white opacity-80"
+        class="relative z-10 flex flex-wrap items-center justify-center gap-x-10 gap-y-6 border-t border-white/5 px-6 py-8 text-white/80"
       >
-        <Amazon />
-        <Dropbox />
-        <Loom />
-        <Slack />
+        <a
+          href="https://www.linkedin.com/in/bharatesh-poojary/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="LinkedIn"
+          class="transition-colors hover:text-white"
+        >
+          <svg
+            class="h-6 w-6"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"
+            ></path>
+          </svg>
+        </a>
+        <a
+          href="https://github.com/BharateshPoojary"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+          class="transition-colors hover:text-white"
+        >
+          <svg
+            class="h-6 w-6"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.39 1.24-3.23-.13-.3-.54-1.53.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.05.14 3 .4 2.29-1.55 3.3-1.23 3.3-1.23.65 1.65.24 2.88.12 3.18.77.84 1.23 1.92 1.23 3.23 0 4.62-2.81 5.64-5.49 5.94.43.37.82 1.1.82 2.22v3.29c0 .32.22.7.82.58A12.01 12.01 0 0 0 24 12.5C24 5.87 18.63.5 12 .5Z"
+            ></path>
+          </svg>
+        </a>
+        <a
+          href="https://x.com/Bharatesh_26"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="X"
+          class="transition-colors hover:text-white"
+        >
+          <svg
+            class="h-6 w-6"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+            ></path>
+          </svg>
+        </a>
       </div>
     </div>
 
-    {/* Footer navigation */}
-    <div class="mt-14 grid grid-cols-2 gap-10 sm:grid-cols-3 lg:grid-cols-6">
-      {/* Brand */}
-      <div class="col-span-2 sm:col-span-3 lg:col-span-1">
-        <a href="/" class="flex items-center gap-2">
-          <span
-            class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white"
-          >
-            <CodeXml class="h-5 w-5" />
-          </span>
-          <span class="text-lg font-bold tracking-tight text-slate-900">
-            bharat webcrafts
-          </span>
-        </a>
-        <a
-          href="mailto:hello@bharatwebcrafts.dev"
-          class="mt-4 block text-sm text-slate-500 hover:text-blue-600 transition-colors"
+    {/* Brand */}
+    <div class="mt-14 flex flex-col items-center text-center">
+      <a href="/" class="flex items-center gap-2">
+        <span
+          class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white"
         >
-          hello@bharatwebcrafts.dev
-        </a>
-      </div>
-
-      {
-        columns.map((col) => (
-          <div>
-            <h3 class="text-sm font-semibold text-slate-900">{col.title}</h3>
-            <ul class="mt-4 space-y-3">
-              {col.links.map((link) => (
-                <li>
-                  <a
-                    href="#"
-                    class="text-sm text-slate-500 hover:text-blue-600 transition-colors"
-                  >
-                    {link}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))
-      }
+          <CodeXml class="h-5 w-5" />
+        </span>
+        <span class="text-lg font-bold tracking-tight text-slate-900">
+          bharat web crafts
+        </span>
+      </a>
+      <a
+        href="mailto:bharatesh@bharatwebcrafts.com"
+        class="mt-4 block text-sm text-slate-500 hover:text-blue-600 transition-colors"
+      >
+        bharatesh@bharatwebcrafts.com
+      </a>
     </div>
 
     {/* Bottom bar */}
-    <div
-      class="mt-12 flex flex-col gap-4 border-t border-slate-100 pt-6 sm:flex-row sm:items-center sm:justify-between"
-    >
+    <div class="mt-12 border-t border-slate-100 pt-6 text-center">
       <p class="text-sm text-slate-500">
-        © 2026 Bharat Webcrafts. All Rights Reserved.
+        © <span id="copyright-year">2026</span> Bharat Webcrafts. All Rights Reserved.
       </p>
-      <div class="flex items-center gap-6">
-        <a
-          href="#"
-          class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors"
-        >
-          Login
-        </a>
-        <a
-          href="#"
-          class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors"
-        >
-          Sign Up
-        </a>
-      </div>
     </div>
   </div>
 </footer>
+
+<script>
+  // Send the query to my inbox via the /api/contact endpoint (Resend) without
+  // leaving the page.
+  // Keep the copyright year current on every page load.
+  const yearEl = document.getElementById("copyright-year");
+  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
+  const form = document.getElementById("query-form") as HTMLFormElement | null;
+  const label = document.getElementById("query-submit-label");
+  const submit = document.getElementById(
+    "query-submit",
+  ) as HTMLButtonElement | null;
+  const status = document.getElementById("query-status");
+
+  const showStatus = (msg: string, ok: boolean) => {
+    if (!status) return;
+    status.textContent = msg;
+    status.classList.remove("hidden", "text-emerald-400", "text-red-400");
+    status.classList.add(ok ? "text-emerald-400" : "text-red-400");
+  };
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const email = data.get("email")?.toString().trim();
+    const query = data.get("query")?.toString().trim();
+    if (!email || !query) return;
+
+    if (submit) submit.disabled = true;
+    if (label) label.textContent = "Sending...";
+    status?.classList.add("hidden");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, query }),
+      });
+      const result = await res.json().catch(() => ({}));
+      if (res.ok) {
+        showStatus("Thanks! Your message has been sent.", true);
+        form.reset();
+      } else {
+        showStatus(
+          result.error ?? "Something went wrong. Please try again.",
+          false,
+        );
+      }
+    } catch {
+      showStatus("Network error. Please try again.", false);
+    } finally {
+      if (submit) submit.disabled = false;
+      if (label) label.textContent = "Send";
+    }
+  });
+</script>

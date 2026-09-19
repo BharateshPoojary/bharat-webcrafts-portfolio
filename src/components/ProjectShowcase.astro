@@ -117,13 +117,13 @@ const active = projects[0];
       {/* Right column: site image */}
       <div
         id="dt-image-wrap"
-        class="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-slate-800 to-slate-900 md:aspect-auto md:h-full"
+        class="relative aspect-video w-full overflow-hidden rounded-xl md:aspect-auto md:h-full"
       >
         <img
           id="dt-image"
           src={active.image}
           alt={active.name}
-          class="h-full w-full object-cover"
+          class="h-full w-full object-contain"
           style={active.image ? "" : "display:none"}
         />
         <span
