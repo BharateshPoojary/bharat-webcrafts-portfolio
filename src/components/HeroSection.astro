@@ -3,11 +3,7 @@ import BgpatternAstroComponent from "./common/Bgpattern.astro";
 import Background from "./common/Background.astro";
 import Bluebutton from "./common/Bluebutton.astro";
 import BlueTextAstroComponent from "./common/Blue-text.astro";
-import Slack from "./logo/Slack.astro";
-import Amazon from "./logo/Amazon.astro";
-import Dropbox from "./logo/Drop-box.astro";
-import Loom from "./logo/Loom.astro";
-import { ArrowUpRight, CircleCheck, Mail, Send } from "@lucide/astro";
+import { ArrowUpRight, CircleCheck } from "@lucide/astro";
 ---
 
 <section
@@ -35,46 +31,17 @@ import { ArrowUpRight, CircleCheck, Mail, Send } from "@lucide/astro";
         A Full-Stack Engineer who designs, builds, and ships products end-to-end
         - that thousands of people rely on every day.
       </p>
-      <!-- 
-      <div
-        class="flex flex-row items-center gap-3 p-1.5 bg-white rounded-2xl max-w-md shadow-2xl"
-      >
-        <div class="flex items-center flex-1 w-full gap-3 px-4 py-2">
-          <Mail class="w-5 h-5 text-slate-400" />
-          <input
-            type="email"
-            placeholder="Send your email"
-            class="w-full bg-transparent text-slate-900 placeholder:text-slate-400 focus:outline-none text-sm"
-          />
-        </div>
-        <div class="md:block hidden">
-          <Bluebutton arrow="Right" text="Talk to Sales" />
-        </div>
-        <div class="md:hidden block">
-          <button
-            class="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors group"
-          >
-            <Send
-              class="w-4 h-4 transition-transform group-hover:translate-x-1"
-            />
-          </button>
-        </div>
-      </div> -->
 
-      {/* Partners Section */}
-      <!-- <div class="pt-4">
-        <p class="text-base font-medium text-slate-200 mb-6">
-          Partners in Financial Success
-        </p>
-        <div
-          class="grid grid-cols-2 gap-x-8 gap-y-8 md:flex md:flex-wrap md:items-center md:gap-x-12 text-white opacity-80"
-        >
-          <Slack />
-          <Amazon />
-          <Dropbox />
-          <Loom />
-        </div>
-      </div> -->
+      {/* Resume button - mobile only; on desktop it lives in the navbar */}
+      <div class="md:hidden">
+        <Bluebutton
+          arrow="UpRight"
+          text="My Resume"
+          href="https://bharat-miscellaneous-bucket.s3.ap-south-1.amazonaws.com/Bharatesh_Poojary_Full_Stack_AI_Engineer.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+        />
+      </div>
     </div>
 
     {/* Right Column - UI Composition */}
