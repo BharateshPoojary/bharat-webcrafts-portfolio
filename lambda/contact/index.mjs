@@ -10,9 +10,9 @@ import { Resend } from "resend";
 const TO = "bharatesh@bharatwebcrafts.com";
 // Sender lives on a verified *subdomain* in Resend (keeps sending reputation
 // isolated from the root domain). Add `send.bharatwebcrafts.com` in Resend and
-// match this address to it. The display name ("Bharat Webcrafts") is what the
+// match this address to it. The display name ("Bharat Web Crafts") is what the
 // recipient sees.
-const FROM = "Bharat Webcrafts <contact@send.bharatwebcrafts.com>";
+const FROM = "Bharat Web Crafts <contact@send.bharatwebcrafts.com>";
 
 export const handler = async (event) => {
   // Function URL uses payload format 2.0: method lives under requestContext.http.
@@ -90,7 +90,7 @@ function emailHtml(email, query) {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e2e8f0;">
       <tr>
         <td style="background:#020617;padding:24px 28px;">
-          <p style="margin:0;color:#60a5fa;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;">Bharat Webcrafts</p>
+          <p style="margin:0;color:#60a5fa;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;">Bharat Web Crafts</p>
           <h1 style="margin:6px 0 0;color:#ffffff;font-size:20px;font-weight:600;">User Query</h1>
         </td>
       </tr>
