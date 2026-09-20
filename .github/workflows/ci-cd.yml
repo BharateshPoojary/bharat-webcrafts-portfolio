@@ -39,6 +39,29 @@ env:
   LAMBDA_FUNCTION_NAME: contact-form 
 
 jobs:
+  # TEMP DEBUG: print the OIDC token's claims so we can see exactly what AWS validates
+  # (sub, aud, iss, repository, ref). Decodes ONLY the payload segment - not a usable
+  # credential. Remove this job once the OIDC handshake works.
+  debug-oidc-token:
+    name: Debug OIDC token claims
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Fetch and decode OIDC token claims
+        run: |
+          # Request the token with the SAME audience the AWS action uses.
+          ID_TOKEN=$(curl -s -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" | jq -r .value)
+          # Take the payload (2nd segment), convert base64url -> base64, pad, decode.
+          PAYLOAD=$(echo "$ID_TOKEN" | cut -d. -f2 | tr '_-' '/+')
+          case $(( ${#PAYLOAD} % 4 )) in
+            2) PAYLOAD="${PAYLOAD}==";;
+            3) PAYLOAD="${PAYLOAD}=";;
+          esac
+          echo "$PAYLOAD" | base64 -d | jq '{sub, aud, iss, repository, ref, repository_owner}'
+
   # 0) Detect what changed so a site-only push skips the Lambda job and vice-versa.
   changes:
     name: Detect changes
