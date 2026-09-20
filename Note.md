@@ -619,22 +619,78 @@ Because HTML is `no-cache`, a CloudFront invalidation of `/*` (or `/*.html`) aft
 each deploy makes the edge serve the new HTML immediately - which ties into the
 manual-invalidation item above.
 
-## Phase 7 - CI/CD (only after manual works)
+## Phase 7 - CI/CD (only after manual works)  ** <- DONE **
 
-- [IN PROGRESS] Drafted `.github/workflows/ci-cd.yml` wrapping the proven manual
-      steps: `bun run build` -> two-pass S3 sync (immutable for `_astro/*`, `no-cache`
-      for the rest) -> CloudFront `/*` invalidation. A separate `deploy-lambda` job
-      re-zips and `aws lambda update-function-code` when `lambda/**` changes.
-- [x] Uses **GitHub OIDC** (`aws-actions/configure-aws-credentials` with
+- [DONE] `.github/workflows/ci-cd.yml` wraps the proven manual steps: `bun run build`
+      -> two-pass S3 sync (immutable for `_astro/*`, `no-cache` for the rest) ->
+      CloudFront `/*` invalidation. A separate `deploy-lambda` job re-zips and
+      `aws lambda update-function-code` when `lambda/**` changes. Both jobs verified
+      green: site deploy and Lambda deploy both work.
+- [DONE] Uses **GitHub OIDC** (`aws-actions/configure-aws-credentials` with
       `role-to-assume`, `permissions: id-token: write`) - no long-lived access keys.
-- [x] Path-filtered with `dorny/paths-filter`: site-only pushes skip the Lambda job
-      and lambda-only pushes skip the site deploy.
-- Before first run, still to do:
-  - [ ] Create the IAM role for OIDC (trust this repo; grant s3 put/delete/list,
-        cloudfront:CreateInvalidation, lambda:UpdateFunctionCode) and add its ARN as
-        the `AWS_DEPLOY_ROLE_ARN` repo secret.
-  - [ ] Confirm `LAMBDA_FUNCTION_NAME` in the workflow matches the real function name
-        (Function URL is in Phase 2; the function's *name* is not recorded here yet).
+- [DONE] Path-filtered with `dorny/paths-filter`: site-only pushes skip the Lambda job
+      and lambda-only pushes skip the site deploy. A `workflow_dispatch` manual run
+      forces both jobs (no diff to filter on).
+- [DONE] IAM role `github-actions-portfolio-deploy`
+      (`arn:aws:iam::920373032992:role/github-actions-portfolio-deploy`) created with
+      an inline permissions policy `portfolio-deploy-permissions` (s3 put/get/delete +
+      ListBucket on the bucket, cloudfront:CreateInvalidation on the distribution,
+      lambda:UpdateFunctionCode on the function). ARN stored as the
+      `AWS_DEPLOY_ROLE_ARN` repo secret.
+- [DONE] `LAMBDA_FUNCTION_NAME` confirmed as `contact-form`.
+
+### Debugging notes: the OIDC setup (things that bit us)
+
+The build + deploy took several iterations. Record for next time:
+
+1. **Component filename casing (build failure).** Git tracked four `common/` components
+   with lowercase names (`bgpattern.astro`, `background.astro`, `blue-text.astro`,
+   `bluebutton.astro`) while the imports and macOS disk used capitalized names. macOS is
+   case-insensitive so it built locally; the Linux CI runner is case-sensitive and
+   failed with `UNRESOLVED_IMPORT`. Fixed with `git mv` to the capitalized names. To
+   prevent recurrence: `git config core.ignorecase false` so git surfaces case-only
+   renames locally instead of hiding them until CI.
+
+2. **OIDC provider must exist first.** Early runs failed with
+   `Not authorized to perform sts:AssumeRoleWithWebIdentity` simply because the IAM
+   **Identity provider** `token.actions.githubusercontent.com` had not been created yet.
+   Register it once (Provider URL `https://token.actions.githubusercontent.com`,
+   Audience `sts.amazonaws.com`). Note IAM is a **global** service - region is irrelevant
+   to OIDC/trust; `AWS_REGION` only affects S3/Lambda/CloudFront calls.
+
+3. **THE main gotcha - numeric IDs in the `sub` claim.** The real OIDC token's `sub`
+   was NOT the documented `repo:OWNER/REPO:ref:refs/heads/main`. It was:
+
+   ```
+   repo:BharateshPoojary@129057104/bharat-webcrafts-portfolio@1335259599:ref:refs/heads/main
+   ```
+
+   GitHub embeds **immutable numeric owner/repo IDs** into `sub` (a hardening feature so
+   a deleted+recreated repo/user with the same name can't impersonate). A trust policy
+   pinning the plain `sub` never matches -> "not authorized". A homemade
+   `echo "repo:${{ github.repository }}:ref:${{ github.ref }}"` step was MISLEADING here
+   because it reconstructs the plain form and hides the IDs. The reliable diagnostic is
+   to decode the actual JWT payload (the `debug-oidc-token` job kept in the workflow).
+
+   **Fix (trust policy)** - match the clean `repository` claim (no IDs) and wildcard the
+   `sub` so it tolerates the IDs while still locking the branch:
+
+   ```json
+   "Condition": {
+     "StringEquals": {
+       "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+       "token.actions.githubusercontent.com:repository": "BharateshPoojary/bharat-webcrafts-portfolio"
+     },
+     "StringLike": {
+       "token.actions.githubusercontent.com:sub": "repo:BharateshPoojary*/bharat-webcrafts-portfolio*:ref:refs/heads/main"
+     }
+   }
+   ```
+
+4. **Debug aids kept in the workflow.** The `debug-oidc-token` job (decodes the token's
+   payload claims - safe, never prints a usable credential) is intentionally kept for
+   future troubleshooting. The misleading `Debug OIDC subject` echo step may still be in
+   `deploy-site`; ignore its output (it reconstructs the plain sub without the IDs).
 
 ---
 
