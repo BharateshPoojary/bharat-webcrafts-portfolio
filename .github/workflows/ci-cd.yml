@@ -90,9 +90,7 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          # TEMP DEBUG: hardcoded to rule out a bad AWS_DEPLOY_ROLE_ARN secret.
-          # Revert to ${{ secrets.AWS_DEPLOY_ROLE_ARN }} once this is confirmed working.
-          role-to-assume: arn:aws:iam::920373032992:role/github-actions-portfolio-deploy
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
       # Pass 1: hashed assets in _astro/ never change under a given name -> cache forever.
