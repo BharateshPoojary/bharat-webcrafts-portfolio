@@ -83,6 +83,9 @@ jobs:
       - name: Build
         # RESEND_API_KEY lives only in Lambda now, so the static build needs no secrets.
         run: bun run build
+        
+      - name: Debug OIDC subject
+        run: echo "sub = repo:${{ github.repository }}:ref:${{ github.ref }}"
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
