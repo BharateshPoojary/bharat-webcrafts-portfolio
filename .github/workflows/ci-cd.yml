@@ -29,7 +29,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  id-token: write # required for GitHub OIDC -> assume the AWS role
+  id-token: write # lets the job request the GitHub OIDC token for AWS,
   contents: read
 
 env:
