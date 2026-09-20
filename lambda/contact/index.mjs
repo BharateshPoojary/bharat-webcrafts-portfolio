@@ -47,7 +47,7 @@ export const handler = async (event) => {
     from: FROM,
     to: [TO],
     replyTo: email,
-    subject: `New query from ${email}`,
+    subject: `New query at bharat web crafts from ${email}`,
     text: `${query}\n\nFrom: ${email}`,
     html: emailHtml(email, query),
   });
