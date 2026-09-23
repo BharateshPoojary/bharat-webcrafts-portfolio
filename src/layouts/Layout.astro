@@ -4,12 +4,47 @@ import "../styles/global.css";
 interface Props {
   title?: string;
   description?: string;
+  /** Social-share image, resolved against the site origin. Square brand logo;
+   *  paired with the `summary` Twitter card below so it isn't cropped. */
+  image?: string;
 }
 
 const {
   title = "Bharat Web Crafts | Web Development & Software Engineering",
   description = "Bharat Web Crafts | portfolio and web development services by Bharatesh Poojary.",
+  image = "/bharatwebcrafts.png",
 } = Astro.props;
+
+// Absolute canonical + social URLs. Astro.site comes from `site` in the config.
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const imageURL = new URL(image, Astro.site);
+
+//This builds structured data using the schema.org vocabulary, which search engines read to understand what your site is about,
+// Person + WebSite structured data helps Google connect this site to the name
+// "Bharatesh Poojary" for branded searches.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      name: "Bharatesh Poojary",
+      url: canonicalURL.origin,
+      jobTitle: "Full Stack & AI Engineer",
+      email: "bharatesh@bharatwebcrafts.com",
+      sameAs: [
+        "https://www.linkedin.com/in/bharatesh-poojary/",
+        "https://github.com/BharateshPoojary",
+        "https://x.com/Bharatesh_26",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      name: "Bharat Web Crafts",
+      url: canonicalURL.origin,
+      description,
+    },
+  ],
+};
 ---
 
 <!doctype html>
@@ -19,9 +54,35 @@ const {
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
+
+    {/* Primary SEO */}
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Bharatesh Poojary" />
+    <link rel="canonical" href={canonicalURL.href} />
+
+    {/* Open Graph */}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Bharat Web Crafts" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL.href} />
+    <meta property="og:image" content={imageURL.href} />
+
+    {/* Twitter */}
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageURL.href} />
+
+    {/* Structured data */}
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(jsonLd)}
+    />
   </head>
   <body>
     <slot />

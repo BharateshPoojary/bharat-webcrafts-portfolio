@@ -51,7 +51,7 @@ const active = projects[0];
     </div>
 
     <div
-      class="grid gap-8 border-t border-white/10 p-6 sm:p-8 md:h-[440px] md:grid-cols-2"
+      class="grid gap-8 border-t border-white/10 p-6 sm:p-8 md:h-110 md:grid-cols-2"
     >
       {/* Left column: title, description, pills, links.
           Description flex-grows so the pills + buttons stay pinned to the
@@ -123,6 +123,8 @@ const active = projects[0];
           id="dt-image"
           src={active.image}
           alt={active.name}
+          loading="lazy"
+          decoding="async"
           class="h-full w-full object-contain"
           style={active.image ? "" : "display:none"}
         />

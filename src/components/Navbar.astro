@@ -106,6 +106,7 @@ import { Menu, X } from "@lucide/astro";
 <div
   id="mobile-menu"
   data-theme="dark"
+  inert
   class="fixed inset-0 z-60 overflow-hidden transition-all duration-300 md:hidden translate-x-full"
 >
   <div class="nav-pattern">
@@ -136,6 +137,8 @@ import { Menu, X } from "@lucide/astro";
   const setOpen = (open: boolean) => {
     if (!menu) return;
     menu.classList.toggle("translate-x-full", !open);
+    // Keep the off-screen menu out of the tab order / a11y tree when closed
+    menu.inert = !open;
     // Hide the hamburger while the menu is open so it doesn't cover the X button
     openBtn?.classList.toggle("hidden", open);
     openBtn?.setAttribute("aria-expanded", String(open));

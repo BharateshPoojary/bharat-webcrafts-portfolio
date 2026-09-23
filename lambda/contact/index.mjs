@@ -29,7 +29,6 @@ export const handler = async (event) => {
     const body = JSON.parse(raw);
     email = (body.email ?? "").toString().trim();
     query = (body.query ?? "").toString().trim();
-    console.log("Bharat Here")
   } catch {
     return json({ error: "Invalid request." }, 400);
   }
