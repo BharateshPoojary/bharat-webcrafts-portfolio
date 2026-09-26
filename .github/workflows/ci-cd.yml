@@ -116,8 +116,8 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v6.3.0
         with:
-          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
-          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::920373032992:role/github-actions-portfolio-deploy
+          aws-region: ap-south-1
 
       # Pass 1: hashed assets in _astro/ never change under a given name -> cache forever.
       - name: Sync hashed assets (immutable)
