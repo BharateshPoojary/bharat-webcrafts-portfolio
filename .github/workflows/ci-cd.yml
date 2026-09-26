@@ -91,6 +91,9 @@ jobs:
     needs: changes
     if: needs.changes.outputs.site == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    environment:
+      name: production-aws
+      url: https://bharatwebcrafts.com
 
     steps:
       - name: Checkout code
@@ -140,9 +143,6 @@ jobs:
           aws cloudfront create-invalidation \
             --distribution-id "${CLOUDFRONT_DISTRIBUTION_ID}" \
             --paths "/*"
-    environment:
-      name: production-aws
-      url: https://bharatwebcrafts.com
 
   # 2) Deploy the contact Lambda only when lambda/** changes.
   deploy-lambda:
@@ -151,7 +151,7 @@ jobs:
     if: needs.changes.outputs.lambda == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment:
-      name: production-backend
+      name: production-aws
       url: https://bharatwebcrafts.com
     steps:
       - name: Checkout code
