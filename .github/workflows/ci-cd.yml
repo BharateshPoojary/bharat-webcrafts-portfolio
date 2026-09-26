@@ -91,9 +91,7 @@ jobs:
     needs: changes
     if: needs.changes.outputs.site == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    # environment:
-    #   name: production
-    #   url: https://bharatwebcrafts.com
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -116,8 +114,8 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v6.3.0
         with:
-          role-to-assume: arn:aws:iam::920373032992:role/github-actions-portfolio-deploy
-          aws-region: ap-south-1
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
 
       # Pass 1: hashed assets in _astro/ never change under a given name -> cache forever.
       - name: Sync hashed assets (immutable)
@@ -142,6 +140,9 @@ jobs:
           aws cloudfront create-invalidation \
             --distribution-id "${CLOUDFRONT_DISTRIBUTION_ID}" \
             --paths "/*"
+    environment:
+      name: production-aws
+      url: https://bharatwebcrafts.com
 
   # 2) Deploy the contact Lambda only when lambda/** changes.
   deploy-lambda:
